@@ -1,5 +1,16 @@
 @use 'tailwindcss';
 
+@layer tailwind-base, primeng, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
 html {
   font-size: 14px;
   font-family: 'Inter var', -apple-system, BlinkMacSystemFont, 'Segoe UI',

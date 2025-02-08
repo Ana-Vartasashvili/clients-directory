@@ -1,13 +1,3 @@
-<div class="flex">
-  <p-iconfield iconPosition="left" class="ml-auto">
-    <p-inputicon>
-      <i class="pi pi-search"></i>
-    </p-inputicon>
-    <input pInputText type="text" placeholder="Search keyword" />
-    <!-- (input)="dt2.filterGlobal($event.target.value, 'contains')" -->
-  </p-iconfield>
-</div>
-
 <p-panel>
   <app-clients-table
     [clients]="clientsStore.clients()"

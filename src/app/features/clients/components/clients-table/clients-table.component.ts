@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
 import { AvatarModule } from 'primeng/avatar'
-import { Client } from '@app/core/models/client.model'
+import { Client, ClientGender } from '@app/core/models/client.model'
 import { environment } from '@environments/environment'
 
 @Component({
@@ -36,6 +36,7 @@ export class ClientsTableComponent {
   @Input({ required: true }) pageSizeOptions: number[] = []
   @Input({ required: true }) pageSize = 0
 
+  readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
   readonly tableHeaders = [
     'Id',

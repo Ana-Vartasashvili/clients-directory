@@ -3,30 +3,28 @@ import {
   Component,
   inject,
   OnInit,
+  signal,
 } from '@angular/core'
-import { ClientsStore } from '../../core/store/clients.store'
-import { TagModule } from 'primeng/tag'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
-import { InputTextModule } from 'primeng/inputtext'
-import { MultiSelectModule } from 'primeng/multiselect'
-import { SelectModule } from 'primeng/select'
 import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
-import { Skeleton } from 'primeng/skeleton'
+import { PanelModule } from 'primeng/panel'
+import { AvatarModule } from 'primeng/avatar'
+import { environment } from '@environments/environment'
+import { ClientsStore } from '@app/core/store/clients.store'
+import { ClientsTableComponent } from '@features/clients/components/clients-table/clients-table.component'
 
 @Component({
   selector: 'app-clients',
   imports: [
     TableModule,
-    TagModule,
     IconFieldModule,
-    InputTextModule,
     InputIconModule,
-    MultiSelectModule,
-    SelectModule,
     CommonModule,
-    Skeleton,
+    PanelModule,
+    AvatarModule,
+    ClientsTableComponent,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',
@@ -34,16 +32,10 @@ import { Skeleton } from 'primeng/skeleton'
 })
 export class ClientsComponent implements OnInit {
   readonly clientsStore = inject(ClientsStore)
+  readonly imageBaseUrl = environment.imageBaseUrl
 
-  clientsTableHeaders = [
-    'Id',
-    'Client',
-    'Gender',
-    'Document Id',
-    'Phone',
-    'Legal Address',
-    'Actual Address',
-  ]
+  pageSize = signal(10)
+  pageSizeOptions = [10, 20, 50]
 
   ngOnInit(): void {
     this.clientsStore.loadClientsByQuery()

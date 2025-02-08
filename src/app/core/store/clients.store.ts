@@ -1,10 +1,4 @@
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-} from '@ngrx/signals'
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals'
 import { Client } from '../models/client.model'
 import { computed, inject } from '@angular/core'
 import { ClientsHttpService } from '../services/clients-http.service'
@@ -37,14 +31,9 @@ export const ClientsStore = signalStore(
         switchMap(() => {
           return clientsHttpService.getClients().pipe(
             tapResponse({
-              next: ({ items }) =>
-                patchState(store, {
-                  clients: items,
-                }),
+              next: ({ items }) => patchState(store, { clients: items }),
               error: (err) => {
-                patchState(store, {
-                  clients: [],
-                })
+                patchState(store, { clients: [] })
               },
               finalize: () => patchState(store, { isLoading: false }),
             })

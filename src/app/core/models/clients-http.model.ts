@@ -3,16 +3,18 @@ import { PaginatedResponse } from './paginated-response.model'
 
 export interface ClientsResponse extends PaginatedResponse<Client> {}
 
-export interface ClientsRequestFilters {
-  id: number | null
-  name: string | null
-  gender: ClientGender | null
-  documentId: string | null
-  phoneNumber: string | null
-  legalAddressCountry: string | null
-  legalAddressCity: string | null
-  legalAddressLine: string | null
-  actualAddressCountry: string | null
-  actualAddressCity: string | null
-  actualAddressLine: string | null
-}
+export type ClientsRequestFilters = Partial<{
+  Id: number | null
+  Name: string | null
+  Gender: ClientGender | null
+  DocumentId: string | null
+  PhoneNumber: string | null
+  LegalAddressCountry: string | null
+  LegalAddressCity: string | null
+  LegalAddressLine: string | null
+  ActualAddressCountry: string | null
+  ActualAddressCity: string | null
+  ActualAddressLine: string | null
+  Page: number | null
+  PageSize: number | null
+}>

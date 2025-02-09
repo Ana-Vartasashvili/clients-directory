@@ -11,9 +11,10 @@
     <app-clients-table
       [clients]="clientsStore.clients()"
       [isLoading]="clientsStore.isLoading()"
-      [pageSize]="pageSize()"
+      [pageSize]="clientsStore.filter().PageSize || defaultPageSize"
       [pageSizeOptions]="pageSizeOptions"
       [tableHeaders]="tableHeaders"
+      [totalRecords]="clientsStore.totalCount()"
       (filtersChange)="onFiltersChange($event)"
     />
   </div>

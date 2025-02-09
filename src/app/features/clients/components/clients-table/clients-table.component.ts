@@ -21,12 +21,14 @@ import { SkeletonModule } from 'primeng/skeleton'
 import { Client, ClientGender } from '@app/core/models/client.model'
 import { environment } from '@environments/environment'
 import { InputNumber } from 'primeng/inputnumber'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ColumnWithFilterComponent } from '@app/features/shared/components/column-with-filter/column-with-filter.component'
 import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
+import { PaginatorModule, PaginatorState } from 'primeng/paginator'
+import { ClientsStore } from '@app/core/store/clients.store'
 
 @Component({
   selector: 'app-clients-table',
@@ -46,6 +48,7 @@ import { FormUtils } from '@app/core/utils/form.utils'
     ReactiveFormsModule,
     InputTextModule,
     ColumnWithFilterComponent,
+    PaginatorModule,
   ],
   templateUrl: './clients-table.component.html',
   styleUrl: './clients-table.component.scss',
@@ -54,12 +57,14 @@ import { FormUtils } from '@app/core/utils/form.utils'
 export class ClientsTableComponent {
   fb = inject(FormBuilder)
   destroyRef = inject(DestroyRef)
+  clientsStore = inject(ClientsStore)
 
   @Input({ required: true }) clients: Client[] = []
   @Input({ required: true }) isLoading = false
   @Input({ required: true }) pageSizeOptions: number[] = []
-  @Input({ required: true }) pageSize = 0
+  @Input({ required: true }) pageSize = 10
   @Input({ required: true }) tableHeaders: string[] = []
+  @Input({ required: true }) totalRecords = 0
 
   @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
 
@@ -70,9 +75,10 @@ export class ClientsTableComponent {
     { name: ClientGender[ClientGender.Female], code: ClientGender.Female },
   ]
 
-  filtersForm = this.initFiltersForm()
+  filtersForm!: FormGroup
 
   ngOnInit(): void {
+    this.filtersForm = this.initFiltersForm()
     this.handleFiltersChange()
   }
 
@@ -90,18 +96,21 @@ export class ClientsTableComponent {
   }
 
   private initFiltersForm() {
+    const gender =
+      this.clientsStore.filter().Gender != null ? Number(this.clientsStore.filter().Gender) : null
+
     return this.fb.group({
-      Id: null,
-      Name: null,
-      Gender: null,
-      DocumentId: null,
-      PhoneNumber: null,
-      LegalAddressCountry: null,
-      LegalAddressCity: null,
-      LegalAddressLine: null,
-      ActualAddressCountry: null,
-      ActualAddressCity: null,
-      ActualAddressLine: null,
+      Id: this.clientsStore.filter().Id,
+      Name: this.clientsStore.filter().Name,
+      Gender: gender,
+      DocumentId: this.clientsStore.filter().DocumentId,
+      PhoneNumber: this.clientsStore.filter().PhoneNumber,
+      LegalAddressCountry: this.clientsStore.filter().LegalAddressCountry,
+      LegalAddressCity: this.clientsStore.filter().LegalAddressCity,
+      LegalAddressLine: this.clientsStore.filter().LegalAddressLine,
+      ActualAddressCountry: this.clientsStore.filter().ActualAddressCountry,
+      ActualAddressCity: this.clientsStore.filter().ActualAddressCity,
+      ActualAddressLine: this.clientsStore.filter().ActualAddressLine,
     })
   }
 
@@ -111,5 +120,10 @@ export class ClientsTableComponent {
     } else {
       return `${client.actualAddressCountry}, ${client.actualAddressCity}, ${client.actualAddressLine}`
     }
+  }
+
+  onPageChange(paginatorState: PaginatorState) {
+    const pageData = { Page: paginatorState.page! + 1, PageSize: paginatorState.rows }
+    this.filtersChange.emit(pageData)
   }
 }

@@ -17,4 +17,12 @@ export type ClientsRequestFilters = Partial<{
   ActualAddressLine: string | null
   Page: number | null
   PageSize: number | null
+  SortBy: ClientsSortBy | null
 }>
+
+export enum ClientsSortBy {
+  CreatedAt = 'createdAt',
+  CreatedAtDesc = 'createdAt_desc',
+  lastName = 'lastName',
+  lastNameDesc = 'lastName_desc',
+}

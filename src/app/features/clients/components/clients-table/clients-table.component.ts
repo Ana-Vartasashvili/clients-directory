@@ -67,6 +67,7 @@ export class ClientsTableComponent {
   @Input({ required: true }) totalRecords = 0
 
   @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
+  @Output() pageChange = new EventEmitter<PaginatorState>()
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
@@ -123,7 +124,6 @@ export class ClientsTableComponent {
   }
 
   onPageChange(paginatorState: PaginatorState) {
-    const pageData = { Page: paginatorState.page! + 1, PageSize: paginatorState.rows }
-    this.filtersChange.emit(pageData)
+    this.pageChange.emit(paginatorState)
   }
 }

@@ -15,6 +15,8 @@ type ClientState = {
   isLoading: boolean
   totalCount: number
   filter: ClientsRequestFilters
+  currentPage: number
+  pageSize: number
 }
 
 const initialState: ClientState = {
@@ -22,6 +24,8 @@ const initialState: ClientState = {
   isLoading: false,
   totalCount: 0,
   filter: {},
+  currentPage: 1,
+  pageSize: 10,
 }
 
 export const ClientsStore = signalStore(
@@ -36,8 +40,8 @@ export const ClientsStore = signalStore(
     ) => ({
       updateFilterQuery: rxMethod<ClientsRequestFilters>(
         tap((filters) => {
-          patchState(store, { filter: { ...filters } })
-          router.navigate([], { queryParams: filters })
+          patchState(store, { filter: { ...store.filter(), ...filters } })
+          router.navigate([], { queryParams: store.filter() })
         })
       ),
 

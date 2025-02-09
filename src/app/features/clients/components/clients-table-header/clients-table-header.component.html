@@ -1,0 +1,19 @@
+<div class="flex gap-4">
+  <p-button
+    label="Clear"
+    [outlined]="true"
+    severity="contrast"
+    icon="pi pi-filter-slash"
+    (onClick)="onClearButtonClick()"
+  />
+
+  <p-select
+    [options]="sortByOptions"
+    optionLabel="name"
+    optionValue="code"
+    placeholder="Order by"
+    class="w-full md:w-56"
+    [(ngModel)]="sortBy"
+    (onChange)="onSortByChange($event)"
+  />
+</div>

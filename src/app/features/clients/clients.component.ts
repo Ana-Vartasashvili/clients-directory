@@ -6,14 +6,15 @@ import { AvatarModule } from 'primeng/avatar'
 import { environment } from '@environments/environment'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { ClientsTableComponent } from '@features/clients/components/clients-table/clients-table.component'
-import { ButtonModule } from 'primeng/button'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
-import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
+import { ClientsRequestFilters, ClientsSortBy } from '@app/core/models/clients-http.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs'
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@app/core/configs/configs'
 import { ToastModule } from 'primeng/toast'
+import { ClientsTableHeaderComponent } from './components/clients-table-header/clients-table-header.component'
+import { PaginatorState } from 'primeng/paginator'
 
 @Component({
   selector: 'app-clients',
@@ -25,8 +26,8 @@ import { ToastModule } from 'primeng/toast'
     PanelModule,
     AvatarModule,
     ClientsTableComponent,
-    ButtonModule,
     ToastModule,
+    ClientsTableHeaderComponent,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',
@@ -48,8 +49,9 @@ export class ClientsComponent implements OnInit {
     'Actual Address',
   ]
 
-  pageSizeOptions = PAGE_SIZE_OPTIONS
-  defaultPageSize = DEFAULT_PAGE_SIZE
+  readonly pageSizeOptions = PAGE_SIZE_OPTIONS
+  readonly defaultPageSize = DEFAULT_PAGE_SIZE
+  readonly ClientsSortBy = ClientsSortBy
 
   ngOnInit(): void {
     const filterQuery = this.clientsStore.filter
@@ -64,8 +66,28 @@ export class ClientsComponent implements OnInit {
     this.clientsStore.updateFilterQuery(filters)
   }
 
+  onPageChange({ page, rows }: PaginatorState) {
+    this.router.navigate([], { queryParams: { Page: page, PageSize: rows } })
+    this.clientsStore.updateFilterQuery({ Page: page! + 1, PageSize: rows })
+  }
+
   onClearFiltersClick() {
-    const { Page, PageSize } = this.clientsStore.filter()
-    this.clientsStore.updateFilterQuery({ PageSize, Page })
+    this.clientsStore.updateFilterQuery(this.getEmptyFilters())
+  }
+
+  private getEmptyFilters() {
+    const filterKeys = Object.keys(this.clientsStore.filter()) as (keyof ClientsRequestFilters)[]
+    const emptyFilters: ClientsRequestFilters = { ...this.clientsStore.filter() }
+    filterKeys.forEach((key) => {
+      if (key !== 'Page' && key !== 'PageSize' && key !== 'SortBy') {
+        emptyFilters[key] = null
+      }
+    })
+
+    return emptyFilters
+  }
+
+  onSortByChange(sortBy: ClientsSortBy) {
+    this.clientsStore.updateFilterQuery({ SortBy: sortBy })
   }
 }

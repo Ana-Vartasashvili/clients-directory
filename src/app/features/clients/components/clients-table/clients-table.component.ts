@@ -2,10 +2,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   DestroyRef,
+  effect,
   EventEmitter,
   inject,
   Input,
   Output,
+  untracked,
 } from '@angular/core'
 import { TagModule } from 'primeng/tag'
 import { IconFieldModule } from 'primeng/iconfield'
@@ -29,6 +31,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
 import { PaginatorModule, PaginatorState } from 'primeng/paginator'
 import { ClientsStore } from '@app/core/store/clients.store'
+import { FILTERS_NOT_TO_RESET } from '@app/core/configs/configs'
 
 @Component({
   selector: 'app-clients-table',
@@ -77,6 +80,21 @@ export class ClientsTableComponent {
   ]
 
   filtersForm!: FormGroup
+
+  constructor() {
+    effect(() => {
+      const filters = this.clientsStore.filter()
+      const filterQueryKeys = Object.entries(filters).filter(
+        ([key, value]) => !FILTERS_NOT_TO_RESET.includes(key) && value != null
+      )
+
+      if (filterQueryKeys.length === 0) {
+        untracked(() => {
+          this.filtersForm.reset()
+        })
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.filtersForm = this.initFiltersForm()

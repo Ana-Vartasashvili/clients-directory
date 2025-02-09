@@ -11,7 +11,11 @@ import { InputIconModule } from 'primeng/inputicon'
 import { ClientsRequestFilters, ClientsSortBy } from '@app/core/models/clients-http.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs'
-import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@app/core/configs/configs'
+import {
+  DEFAULT_PAGE_SIZE,
+  FILTERS_NOT_TO_RESET,
+  PAGE_SIZE_OPTIONS,
+} from '@app/core/configs/configs'
 import { ToastModule } from 'primeng/toast'
 import { ClientsTableHeaderComponent } from './components/clients-table-header/clients-table-header.component'
 import { PaginatorState } from 'primeng/paginator'
@@ -79,7 +83,7 @@ export class ClientsComponent implements OnInit {
     const filterKeys = Object.keys(this.clientsStore.filter()) as (keyof ClientsRequestFilters)[]
     const emptyFilters: ClientsRequestFilters = { ...this.clientsStore.filter() }
     filterKeys.forEach((key) => {
-      if (key !== 'Page' && key !== 'PageSize' && key !== 'SortBy') {
+      if (!FILTERS_NOT_TO_RESET.includes(key)) {
         emptyFilters[key] = null
       }
     })

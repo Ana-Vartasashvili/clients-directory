@@ -7,6 +7,8 @@ import { pipe, distinctUntilChanged, tap, switchMap, delay } from 'rxjs'
 import { tapResponse } from '@ngrx/operators'
 import { ClientsRequestFilters } from '../models/clients-http.model'
 import { Router } from '@angular/router'
+import { MessageService } from 'primeng/api'
+import { ErrorHandler } from '@utils/error.utils'
 
 type ClientState = {
   clients: Client[]
@@ -26,7 +28,12 @@ export const ClientsStore = signalStore(
   { providedIn: 'root' },
   withState(initialState),
   withMethods(
-    (store, clientsHttpService = inject(ClientsHttpService), router = inject(Router)) => ({
+    (
+      store,
+      clientsHttpService = inject(ClientsHttpService),
+      router = inject(Router),
+      messageService = inject(MessageService)
+    ) => ({
       updateFilterQuery: rxMethod<ClientsRequestFilters>(
         tap((filters) => {
           patchState(store, { filter: { ...filters } })
@@ -45,8 +52,15 @@ export const ClientsStore = signalStore(
             return clientsHttpService.getClients(filters).pipe(
               tapResponse({
                 next: ({ items, totalCount }) => patchState(store, { clients: items, totalCount }),
-                error: () => {
+                error: (error) => {
                   patchState(store, { clients: [] })
+                  messageService.add({
+                    severity: 'error',
+                    summary: ErrorHandler.getErrorMessageSummary(error),
+                    detail: ErrorHandler.getErrorMessageDetails(error),
+                    life: 2000,
+                    closeIcon: 'pi pi-times',
+                  })
                 },
                 finalize: () => patchState(store, { isLoading: false }),
               })

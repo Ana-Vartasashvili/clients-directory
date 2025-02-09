@@ -13,6 +13,7 @@ import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
 import { ActivatedRoute, Router } from '@angular/router'
 import { take } from 'rxjs'
 import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@app/core/configs/configs'
+import { ToastModule } from 'primeng/toast'
 
 @Component({
   selector: 'app-clients',
@@ -25,6 +26,7 @@ import { DEFAULT_PAGE_SIZE, PAGE_SIZE_OPTIONS } from '@app/core/configs/configs'
     AvatarModule,
     ClientsTableComponent,
     ButtonModule,
+    ToastModule,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',

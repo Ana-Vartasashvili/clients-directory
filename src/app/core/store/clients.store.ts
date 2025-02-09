@@ -3,7 +3,7 @@ import { Client } from '../models/client.model'
 import { computed, inject } from '@angular/core'
 import { ClientsHttpService } from '../services/clients-http.service'
 import { rxMethod } from '@ngrx/signals/rxjs-interop'
-import { pipe, debounceTime, distinctUntilChanged, tap, switchMap } from 'rxjs'
+import { pipe, distinctUntilChanged, tap, switchMap, delay } from 'rxjs'
 import { tapResponse } from '@ngrx/operators'
 
 type ClientState = {
@@ -25,14 +25,16 @@ export const ClientsStore = signalStore(
   withMethods((store, clientsHttpService = inject(ClientsHttpService)) => ({
     loadClientsByQuery: rxMethod<void>(
       pipe(
-        debounceTime(300),
         distinctUntilChanged(),
-        tap(() => patchState(store, { isLoading: true })),
+        tap(() => {
+          patchState(store, { isLoading: true })
+        }),
+        delay(1000),
         switchMap(() => {
           return clientsHttpService.getClients().pipe(
             tapResponse({
               next: ({ items }) => patchState(store, { clients: items }),
-              error: (err) => {
+              error: () => {
                 patchState(store, { clients: [] })
               },
               finalize: () => patchState(store, { isLoading: false }),

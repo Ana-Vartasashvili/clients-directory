@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
-import { environment } from '../../../environments/environment'
-import { ClientsResponse } from '../models/clients-http.model'
+import { environment } from '@environments/environment'
+import { ClientsRequestFilters, ClientsResponse } from '../models/clients-http.model'
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +9,22 @@ import { ClientsResponse } from '../models/clients-http.model'
 export class ClientsHttpService {
   readonly http = inject(HttpClient)
 
-  getClients() {
-    return this.http.get<ClientsResponse>(`${environment.apiUrl}/Clients`)
+  getClients(filters: ClientsRequestFilters) {
+    let params = this.getQueryParamsFrom(filters)
+
+    return this.http.get<ClientsResponse>(`${environment.apiUrl}/Clients`, { params })
+  }
+
+  private getQueryParamsFrom(filters: ClientsRequestFilters) {
+    let params = new HttpParams()
+
+    Object.keys(filters).forEach((key) => {
+      const value = filters[key as keyof ClientsRequestFilters]
+      if (value != null) {
+        params = params.set(key, value.toString())
+      }
+    })
+
+    return params
   }
 }

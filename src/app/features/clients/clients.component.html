@@ -1,8 +1,11 @@
 <p-panel>
-  @if(clientsStore.isLoading()){
-  <app-table-skeleton [tableColumns]="tableHeaders" [tableRows]="tableSkeletonRows()" />
-  } @else {
-  <p-button label="Clear" [outlined]="true" severity="contrast" icon="pi pi-filter-slash" />
+  <p-button
+    label="Clear"
+    [outlined]="true"
+    severity="contrast"
+    icon="pi pi-filter-slash"
+    (onClick)="onClearFiltersClick()"
+  />
 
   <div class="mt-4">
     <app-clients-table
@@ -11,7 +14,7 @@
       [pageSize]="pageSize()"
       [pageSizeOptions]="pageSizeOptions"
       [tableHeaders]="tableHeaders"
+      (filtersChange)="onFiltersChange($event)"
     />
   </div>
-  }
 </p-panel>

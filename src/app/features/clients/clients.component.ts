@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
@@ -6,10 +14,12 @@ import { AvatarModule } from 'primeng/avatar'
 import { environment } from '@environments/environment'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { ClientsTableComponent } from '@features/clients/components/clients-table/clients-table.component'
-import { TableSkeletonComponent } from '../shared/components/table-skeleton/table-skeleton.component'
 import { ButtonModule } from 'primeng/button'
 import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
+import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
+import { ActivatedRoute, Router } from '@angular/router'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-clients',
@@ -21,7 +31,6 @@ import { InputIconModule } from 'primeng/inputicon'
     PanelModule,
     AvatarModule,
     ClientsTableComponent,
-    TableSkeletonComponent,
     ButtonModule,
   ],
   templateUrl: './clients.component.html',
@@ -30,6 +39,10 @@ import { InputIconModule } from 'primeng/inputicon'
 })
 export class ClientsComponent implements OnInit {
   readonly clientsStore = inject(ClientsStore)
+  readonly router = inject(Router)
+  readonly route = inject(ActivatedRoute)
+  readonly destroyRef = inject(DestroyRef)
+
   readonly imageBaseUrl = environment.imageBaseUrl
   readonly tableHeaders = [
     'Id',
@@ -46,6 +59,19 @@ export class ClientsComponent implements OnInit {
   tableSkeletonRows = computed(() => Array.from({ length: this.pageSize() }, (_, i) => i))
 
   ngOnInit(): void {
-    this.clientsStore.loadClientsByQuery()
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((params) => {
+      this.clientsStore.loadClientsByQuery(params as ClientsRequestFilters)
+    })
+  }
+
+  onFiltersChange(filters: ClientsRequestFilters) {
+    this.router.navigate([], {
+      queryParams: filters,
+      queryParamsHandling: 'merge',
+    })
+  }
+
+  onClearFiltersClick() {
+    this.router.navigate([], { queryParams: {} })
   }
 }

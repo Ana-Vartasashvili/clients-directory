@@ -7,7 +7,6 @@
     [rows]="pageSize"
     [rowsPerPageOptions]="pageSizeOptions"
     [loading]="isLoading"
-    [showLoader]="false"
     [paginator]="true"
     [tableStyle]="{ 'min-width': '75rem' }"
     [rowHover]="true"
@@ -21,14 +20,14 @@
               placeholder="Id"
               optionLabel="Id"
               [useGrouping]="false"
-              formControlName="id"
+              formControlName="Id"
             />
           </app-column-with-filter>
         </th>
 
         <th class="min-w-7">
           <app-column-with-filter columnLabel="Client">
-            <input pInputText placeholder="Client name" formControlName="name" />
+            <input pInputText placeholder="Client name" formControlName="Name" />
           </app-column-with-filter>
         </th>
 
@@ -39,7 +38,7 @@
               optionLabel="name"
               placeholder="Client Gender"
               class="w-full md:w-56"
-              formControlName="gender"
+              formControlName="Gender"
               optionValue="code"
             />
           </app-column-with-filter>
@@ -50,7 +49,7 @@
             <input
               pInputText
               placeholder="Document Id"
-              formControlName="documentId"
+              formControlName="DocumentId"
               maxlength="11"
             />
           </app-column-with-filter>
@@ -61,7 +60,7 @@
             <input
               pInputText
               placeholder="Phone number"
-              formControlName="documentId"
+              formControlName="PhoneNumber"
               maxlength="9"
             />
           </app-column-with-filter>
@@ -70,9 +69,9 @@
         <th class="min-w-7">
           <app-column-with-filter columnLabel="Legal Address">
             <div class="flex items-center gap-2 flex-col">
-              <input pInputText placeholder="Country" formControlName="legalAddressCountry" />
-              <input pInputText placeholder="City" formControlName="legalAddressCity" />
-              <input pInputText placeholder="Address line" formControlName="legalAddressLine" />
+              <input pInputText placeholder="Country" formControlName="LegalAddressCountry" />
+              <input pInputText placeholder="City" formControlName="LegalAddressCity" />
+              <input pInputText placeholder="Address line" formControlName="LegalAddressLine" />
             </div>
           </app-column-with-filter>
         </th>
@@ -80,9 +79,9 @@
         <th class="min-w-7">
           <app-column-with-filter columnLabel="Actual Address">
             <div class="flex items-center gap-2 flex-col">
-              <input pInputText placeholder="Country" formControlName="actualAddressCountry" />
-              <input pInputText placeholder="City" formControlName="actualAddressCity" />
-              <input pInputText placeholder="Address line" formControlName="actualAddressLine" />
+              <input pInputText placeholder="Country" formControlName="ActualAddressCountry" />
+              <input pInputText placeholder="City" formControlName="ActualAddressCity" />
+              <input pInputText placeholder="Address line" formControlName="ActualAddressLine" />
             </div>
           </app-column-with-filter>
         </th>

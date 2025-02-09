@@ -60,7 +60,7 @@ export class ClientsTableComponent {
   @Input({ required: true }) pageSize = 0
   @Input({ required: true }) tableHeaders: string[] = []
 
-  @Output() onFiltersChange = new EventEmitter<ClientsRequestFilters>()
+  @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
@@ -79,27 +79,27 @@ export class ClientsTableComponent {
     this.filtersForm.valueChanges
       .pipe(
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
-        debounceTime(400),
+        debounceTime(250),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {
-        this.onFiltersChange.emit(value as ClientsRequestFilters)
+        this.filtersChange.emit(value as ClientsRequestFilters)
       })
   }
 
   private initFiltersForm() {
     return this.fb.group({
-      id: null,
-      name: '',
-      gender: null,
-      documentId: '',
-      phoneNumber: '',
-      legalAddressCountry: '',
-      legalAddressCity: '',
-      legalAddressLine: '',
-      actualAddressCountry: '',
-      actualAddressCity: '',
-      actualAddressLine: '',
+      Id: null,
+      Name: null,
+      Gender: null,
+      DocumentId: null,
+      PhoneNumber: null,
+      LegalAddressCountry: null,
+      LegalAddressCity: null,
+      LegalAddressLine: null,
+      ActualAddressCountry: null,
+      ActualAddressCity: null,
+      ActualAddressLine: null,
     })
   }
 

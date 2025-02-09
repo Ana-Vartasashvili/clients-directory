@@ -26,6 +26,7 @@ import { ColumnWithFilterComponent } from '@app/features/shared/components/colum
 import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormUtils } from '@app/core/utils/form.utils'
 
 @Component({
   selector: 'app-clients-table',
@@ -83,7 +84,8 @@ export class ClientsTableComponent {
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {
-        this.filtersChange.emit(value as ClientsRequestFilters)
+        const trimmedValue = FormUtils.trimFormValues(value)
+        this.filtersChange.emit(trimmedValue as ClientsRequestFilters)
       })
   }
 

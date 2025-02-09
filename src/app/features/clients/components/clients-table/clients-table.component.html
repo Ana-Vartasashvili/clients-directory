@@ -1,72 +1,140 @@
-<p-table
-  #dt2
-  [value]="clients"
-  [columns]="tableHeaders"
-  dataKey="id"
-  [rows]="pageSize"
-  [rowsPerPageOptions]="pageSizeOptions"
-  [loading]="isLoading"
-  [showLoader]="false"
-  [paginator]="true"
-  [tableStyle]="{ 'min-width': '75rem' }"
-  [rowHover]="true"
-  paginatorStyleClass="flex !justify-end mt-4"
->
-  <ng-template #header let-columns>
-    <tr>
-      @for(col of columns; track col; let isFirst = $first){
-      <th [style.width.%]="isFirst ? 5 : 100 / columns.length">
-        {{ col }}
-      </th>
-      }
-    </tr>
-  </ng-template>
+<form [formGroup]="filtersForm">
+  <p-table
+    #dt2
+    [value]="clients"
+    [columns]="tableHeaders"
+    dataKey="id"
+    [rows]="pageSize"
+    [rowsPerPageOptions]="pageSizeOptions"
+    [loading]="isLoading"
+    [showLoader]="false"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '75rem' }"
+    [rowHover]="true"
+    paginatorStyleClass="flex !justify-end mt-4"
+  >
+    <ng-template #header let-columns>
+      <tr>
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Id">
+            <p-inputnumber
+              placeholder="Id"
+              optionLabel="Id"
+              [useGrouping]="false"
+              formControlName="id"
+            />
+          </app-column-with-filter>
+        </th>
 
-  <ng-template #body let-client>
-    <tr>
-      <td>{{ client.id }}</td>
-      <td>
-        <div class="flex items-center gap-2">
-          <p-avatar
-            [image]="imageBaseUrl + client.profileImageUrl"
-            shape="circle"
-            class="object-cover !bg-slate-200"
-            [label]="client.profileImageUrl ? '' : client.firstName[0]"
-          ></p-avatar>
-          <span class="whitespace-nowrap">{{ client.firstName + ' ' + client.lastName }}</span>
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-2">
-          <span>{{ Gender[client.gender] }}</span>
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-2">
-          <span>{{ client.documentId }}</span>
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-2">
-          <span>{{ client.phoneNumber }}</span>
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-2">
-          <span>{{ getFullAddress(client, 'legal') }}</span>
-        </div>
-      </td>
-      <td>
-        <div class="flex items-center gap-2">
-          <span>{{ getFullAddress(client, 'actual') }}</span>
-        </div>
-      </td>
-    </tr>
-  </ng-template>
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Client">
+            <input pInputText placeholder="Client name" formControlName="name" />
+          </app-column-with-filter>
+        </th>
 
-  <ng-template #emptymessage let-columns>
-    <tr>
-      <td colspan="7">No clients found.</td>
-    </tr>
-  </ng-template>
-</p-table>
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Gender">
+            <p-select
+              [options]="genders"
+              optionLabel="name"
+              placeholder="Client Gender"
+              class="w-full md:w-56"
+              formControlName="gender"
+              optionValue="code"
+            />
+          </app-column-with-filter>
+        </th>
+
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Document Id">
+            <input
+              pInputText
+              placeholder="Document Id"
+              formControlName="documentId"
+              maxlength="11"
+            />
+          </app-column-with-filter>
+        </th>
+
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Phone Number">
+            <input
+              pInputText
+              placeholder="Phone number"
+              formControlName="documentId"
+              maxlength="9"
+            />
+          </app-column-with-filter>
+        </th>
+
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Legal Address">
+            <div class="flex items-center gap-2 flex-col">
+              <input pInputText placeholder="Country" formControlName="legalAddressCountry" />
+              <input pInputText placeholder="City" formControlName="legalAddressCity" />
+              <input pInputText placeholder="Address line" formControlName="legalAddressLine" />
+            </div>
+          </app-column-with-filter>
+        </th>
+
+        <th class="min-w-7">
+          <app-column-with-filter columnLabel="Actual Address">
+            <div class="flex items-center gap-2 flex-col">
+              <input pInputText placeholder="Country" formControlName="actualAddressCountry" />
+              <input pInputText placeholder="City" formControlName="actualAddressCity" />
+              <input pInputText placeholder="Address line" formControlName="actualAddressLine" />
+            </div>
+          </app-column-with-filter>
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template #body let-client>
+      <tr>
+        <td>{{ client.id }}</td>
+        <td>
+          <div class="flex items-center gap-2">
+            <p-avatar
+              [image]="imageBaseUrl + client.profileImageUrl"
+              shape="circle"
+              class="object-cover !bg-slate-200"
+              [label]="client.profileImageUrl ? '' : client.firstName[0]"
+            ></p-avatar>
+            <span class="whitespace-nowrap">{{ client.firstName + ' ' + client.lastName }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ Gender[client.gender] }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ client.documentId }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ client.phoneNumber }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ getFullAddress(client, 'legal') }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="flex items-center gap-2">
+            <span>{{ getFullAddress(client, 'actual') }}</span>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template #emptymessage let-columns>
+      <tr>
+        <td colspan="7">No clients found.</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</form>

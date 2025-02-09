@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core'
-import { IconFieldModule } from 'primeng/iconfield'
-import { InputIconModule } from 'primeng/inputicon'
 import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
@@ -9,6 +7,9 @@ import { environment } from '@environments/environment'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { ClientsTableComponent } from '@features/clients/components/clients-table/clients-table.component'
 import { TableSkeletonComponent } from '../shared/components/table-skeleton/table-skeleton.component'
+import { ButtonModule } from 'primeng/button'
+import { IconFieldModule } from 'primeng/iconfield'
+import { InputIconModule } from 'primeng/inputicon'
 
 @Component({
   selector: 'app-clients',
@@ -21,6 +22,7 @@ import { TableSkeletonComponent } from '../shared/components/table-skeleton/tabl
     AvatarModule,
     ClientsTableComponent,
     TableSkeletonComponent,
+    ButtonModule,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',

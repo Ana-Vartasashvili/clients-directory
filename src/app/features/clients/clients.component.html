@@ -2,12 +2,16 @@
   @if(clientsStore.isLoading()){
   <app-table-skeleton [tableColumns]="tableHeaders" [tableRows]="tableSkeletonRows()" />
   } @else {
-  <app-clients-table
-    [clients]="clientsStore.clients()"
-    [isLoading]="clientsStore.isLoading()"
-    [pageSize]="pageSize()"
-    [pageSizeOptions]="pageSizeOptions"
-    [tableHeaders]="tableHeaders"
-  />
+  <p-button label="Clear" [outlined]="true" severity="contrast" icon="pi pi-filter-slash" />
+
+  <div class="mt-4">
+    <app-clients-table
+      [clients]="clientsStore.clients()"
+      [isLoading]="clientsStore.isLoading()"
+      [pageSize]="pageSize()"
+      [pageSizeOptions]="pageSizeOptions"
+      [tableHeaders]="tableHeaders"
+    />
+  </div>
   }
 </p-panel>

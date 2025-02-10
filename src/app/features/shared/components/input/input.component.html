@@ -1,4 +1,13 @@
 <p-floatlabel variant="on">
-  <input pInputText [type]="type" [id]="name" autocomplete="off" class="w-full" />
+  <input
+    pInputText
+    [type]="type"
+    [id]="name"
+    autocomplete="off"
+    class="w-full"
+    [disabled]="disabled"
+    (input)="onInput($event)"
+    (blur)="onBlur()"
+  />
   <label [for]="name">{{ label }}</label>
 </p-floatlabel>

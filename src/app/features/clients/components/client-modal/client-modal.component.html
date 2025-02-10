@@ -22,13 +22,24 @@
       />
 
       <div class="flex gap-3 w-full">
-        <app-input name="firstName" label="First Name" class="w-full" />
-        <app-input name="lastName" label="Last Name" class="w-full" />
+        <app-input name="firstName" label="First Name" class="w-full" formControlName="FirstName" />
+        <app-input name="lastName" label="Last Name" class="w-full" formControlName="LastName" />
       </div>
 
       <div class="flex gap-3 w-full">
-        <app-input name="documentId" label="Document Id" class="w-full" />
-        <app-input name="phoneNumber" label="Phone number" type="number" class="w-full" />
+        <app-input
+          name="documentId"
+          label="Document Id"
+          class="w-full"
+          formControlName="DocumentId"
+        />
+        <app-input
+          name="phoneNumber"
+          label="Phone number"
+          type="number"
+          class="w-full"
+          formControlName="PhoneNumber"
+        />
       </div>
 
       <div class="flex flex-wrap gap-4">
@@ -44,10 +55,25 @@
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Legal address</h3>
 
         <div class="flex gap-3 w-full mb-5">
-          <app-input name="legalAddressCountry" label="Country" class="w-full" />
-          <app-input name="legalAddressCity" label="City" class="w-full" />
+          <app-input
+            name="legalAddressCountry"
+            label="Country"
+            class="w-full"
+            formControlName="LegalAddressCountry"
+          />
+          <app-input
+            name="legalAddressCity"
+            label="City"
+            class="w-full"
+            formControlName="LegalAddressCity"
+          />
         </div>
-        <app-input name="legalAddressLine" label="Full address" />
+
+        <app-input
+          name="legalAddressLine"
+          label="Full address"
+          formControlName="LegalAddressLine"
+        />
       </div>
 
       <p-divider styleClass="m-1!" />
@@ -56,10 +82,25 @@
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Actual address</h3>
 
         <div class="flex gap-3 w-full mb-5">
-          <app-input name="actualAddressCountry" label="Country" class="w-full" />
-          <app-input name="actualAddressCity" label="City" class="w-full" />
+          <app-input
+            name="actualAddressCountry"
+            label="Country"
+            class="w-full"
+            formControlName="ActualAddressCountry"
+          />
+          <app-input
+            name="actualAddressCity"
+            label="City"
+            class="w-full"
+            formControlName="ActualAddressCity"
+          />
         </div>
-        <app-input name="actualAddressLine" label="Full address" />
+
+        <app-input
+          name="actualAddressLine"
+          label="Full address"
+          formControlName="ActualAddressLine"
+        />
       </div>
     </div>
 

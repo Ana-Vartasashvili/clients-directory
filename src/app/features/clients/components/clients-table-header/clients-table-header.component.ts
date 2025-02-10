@@ -16,6 +16,7 @@ export class ClientsTableHeaderComponent {
 
   @Output() clearButtonClick = new EventEmitter<void>()
   @Output() sortByChange = new EventEmitter<ClientsSortBy>()
+  @Output() addButtonClick = new EventEmitter<void>()
 
   sortByOptions = [
     { name: 'Oldest First', code: ClientsSortBy.CreatedAt },
@@ -30,5 +31,9 @@ export class ClientsTableHeaderComponent {
 
   onSortByChange(event: SelectChangeEvent) {
     this.sortByChange.emit(event.value as ClientsSortBy)
+  }
+
+  onAddButtonClick() {
+    this.addButtonClick.emit()
   }
 }

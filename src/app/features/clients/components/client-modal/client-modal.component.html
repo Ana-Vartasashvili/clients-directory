@@ -1,0 +1,188 @@
+<p-dialog
+  header="Add client"
+  [modal]="true"
+  [visible]="isVisible"
+  [style]="{ width: '38rem', height: 'fit-content' }"
+  (visibleChange)="onCloseModal()"
+>
+  <form [formGroup]="clientForm">
+    <div class="mt-2 flex flex-col gap-y-5 mb-7">
+      <p-fileupload
+        #fu
+        mode="advanced"
+        chooseLabel="Client image"
+        chooseIcon="pi pi-upload"
+        name="demo[]"
+        accept="image/*"
+        [showCancelButton]="false"
+        [showUploadButton]="false"
+        previewWidth="50"
+        styleClass="h-fit-content flex justify-center flex-col items-center"
+        maxFileSize="1000000"
+      />
+
+      <div class="flex gap-3 w-full">
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              type="text"
+              pInputText
+              id="FirstName"
+              autocomplete="off"
+              class="w-full"
+              formControlName="FirstName"
+            />
+            <label for="FirstName">First name</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="LastName"
+              autocomplete="off"
+              class="w-full"
+              formControlName="LastName"
+            />
+            <label for="LastName">Last name</label>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <div class="flex gap-3 w-full">
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="DocumentId"
+              autocomplete="off"
+              class="w-full"
+              formControlName="DocumentId"
+            />
+            <label for="DocumentId">Document Id</label>
+          </p-floatlabel>
+        </div>
+
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="PhoneNumber"
+              autocomplete="off"
+              class="w-full"
+              formControlName="PhoneNumber"
+            />
+            <label for="PhoneNumber">Phone number</label>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-4">
+        @for(gender of genders; track gender){
+        <div class="flex items-center">
+          <p-radiobutton [value]="gender.code" [inputId]="gender.name" formControlName="Gender" />
+          <label [for]="gender.name" class="ml-2">{{ gender.name }}</label>
+        </div>
+        }
+      </div>
+
+      <div>
+        <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Legal address</h3>
+
+        <div class="flex gap-3 w-full mb-5">
+          <div class="w-full">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                id="LegalAddressCountry"
+                autocomplete="off"
+                class="w-full"
+                formControlName="LegalAddressCountry"
+              />
+              <label for="LegalAddressCountry">Country</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="w-full">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                id="LegalAddressCity"
+                autocomplete="off"
+                class="w-full"
+                formControlName="LegalAddressCity"
+              />
+              <label for="LegalAddressCity">City</label>
+            </p-floatlabel>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="LegalAddressLine"
+              autocomplete="off"
+              class="w-full"
+              formControlName="LegalAddressLine"
+            />
+            <label for="LegalAddressLine">Full address</label>
+          </p-floatlabel>
+        </div>
+      </div>
+
+      <p-divider styleClass="m-1!" />
+
+      <div>
+        <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Actual address</h3>
+
+        <div class="flex gap-3 w-full mb-5">
+          <div class="w-full">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                id="ActualAddressCountry"
+                autocomplete="off"
+                class="w-full"
+                formControlName="ActualAddressCountry"
+              />
+              <label for="ActualAddressCountry">Country</label>
+            </p-floatlabel>
+          </div>
+
+          <div class="w-full">
+            <p-floatlabel variant="on">
+              <input
+                pInputText
+                id="ActualAddressCity"
+                autocomplete="off"
+                class="w-full"
+                formControlName="ActualAddressCity"
+              />
+              <label for="ActualAddressCity">City</label>
+            </p-floatlabel>
+          </div>
+        </div>
+
+        <div class="w-full">
+          <p-floatlabel variant="on">
+            <input
+              pInputText
+              id="ActualAddressLine"
+              autocomplete="off"
+              class="w-full"
+              formControlName="ActualAddressLine"
+            />
+            <label for="ActualAddressLine">Full address</label>
+          </p-floatlabel>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2">
+      <p-button label="Cancel" severity="secondary" />
+      <p-button label="Save" />
+    </div>
+  </form>
+</p-dialog>

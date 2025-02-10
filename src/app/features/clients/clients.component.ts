@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
@@ -15,10 +15,11 @@ import {
   DEFAULT_PAGE_SIZE,
   FILTERS_NOT_TO_RESET,
   PAGE_SIZE_OPTIONS,
-} from '@app/core/configs/configs'
+} from '@app/core/constants/constants'
 import { ToastModule } from 'primeng/toast'
-import { ClientsTableHeaderComponent } from './components/clients-table-header/clients-table-header.component'
 import { PaginatorState } from 'primeng/paginator'
+import { ClientsTableHeaderComponent } from '@features/clients/components/clients-table-header/clients-table-header.component'
+import { ClientModalComponent } from './components/client-modal/client-modal.component'
 
 @Component({
   selector: 'app-clients',
@@ -32,6 +33,7 @@ import { PaginatorState } from 'primeng/paginator'
     ClientsTableComponent,
     ToastModule,
     ClientsTableHeaderComponent,
+    ClientModalComponent,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',
@@ -57,6 +59,8 @@ export class ClientsComponent implements OnInit {
   readonly defaultPageSize = DEFAULT_PAGE_SIZE
   readonly ClientsSortBy = ClientsSortBy
 
+  isModalShown = signal(false)
+
   ngOnInit(): void {
     const filterQuery = this.clientsStore.filter
     this.clientsStore.loadClientsByQuery(filterQuery)
@@ -71,7 +75,6 @@ export class ClientsComponent implements OnInit {
   }
 
   onPageChange({ page, rows }: PaginatorState) {
-    this.router.navigate([], { queryParams: { Page: page, PageSize: rows } })
     this.clientsStore.updateFilterQuery({ Page: page! + 1, PageSize: rows })
   }
 
@@ -93,5 +96,13 @@ export class ClientsComponent implements OnInit {
 
   onSortByChange(sortBy: ClientsSortBy) {
     this.clientsStore.updateFilterQuery({ SortBy: sortBy })
+  }
+
+  onAddButtonClick() {
+    this.isModalShown.set(true)
+  }
+
+  onCloseModal() {
+    this.isModalShown.set(false)
   }
 }

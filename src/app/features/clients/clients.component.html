@@ -3,6 +3,7 @@
     [sortBy]="clientsStore.filter().SortBy || ClientsSortBy.CreatedAtDesc"
     (clearButtonClick)="onClearFiltersClick()"
     (sortByChange)="onSortByChange($event)"
+    (addButtonClick)="onAddButtonClick()"
   />
 
   <div class="mt-4">
@@ -19,4 +20,6 @@
   </div>
 
   <p-toast></p-toast>
+
+  <app-client-modal [isVisible]="isModalShown()" (closeModal)="onCloseModal()" />
 </p-panel>

@@ -26,12 +26,12 @@ import { InputNumber } from 'primeng/inputnumber'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ColumnWithFilterComponent } from '@app/features/shared/components/column-with-filter/column-with-filter.component'
 import { ClientsRequestFilters } from '@app/core/models/clients-http.model'
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs/operators'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
 import { PaginatorModule, PaginatorState } from 'primeng/paginator'
 import { ClientsStore } from '@app/core/store/clients.store'
-import { FILTERS_NOT_TO_RESET } from '@app/core/configs/configs'
+import { FILTERS_NOT_TO_RESET, GENDERS } from '@app/core/constants/constants'
 
 @Component({
   selector: 'app-clients-table',
@@ -74,10 +74,7 @@ export class ClientsTableComponent {
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
-  readonly genders = [
-    { name: ClientGender[ClientGender.Male], code: ClientGender.Male },
-    { name: ClientGender[ClientGender.Female], code: ClientGender.Female },
-  ]
+  readonly genders = GENDERS
 
   filtersForm!: FormGroup
 
@@ -106,6 +103,7 @@ export class ClientsTableComponent {
       .pipe(
         distinctUntilChanged((prev, curr) => JSON.stringify(prev) === JSON.stringify(curr)),
         debounceTime(250),
+        filter((formValue) => Object.values(formValue).some((val) => val !== null)),
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((value) => {

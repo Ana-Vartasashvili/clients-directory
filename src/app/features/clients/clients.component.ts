@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
@@ -20,6 +27,12 @@ import { ToastModule } from 'primeng/toast'
 import { PaginatorState } from 'primeng/paginator'
 import { ClientsTableHeaderComponent } from '@features/clients/components/clients-table-header/clients-table-header.component'
 import { ClientModalComponent } from './components/client-modal/client-modal.component'
+import { CreatedClient } from '@app/core/models/client.model'
+import { ClientsHttpService } from '@app/core/services/clients-http.service'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { MessageService } from 'primeng/api'
+import { FormUtils } from '@app/core/utils/form.utils'
+import { ErrorHandler } from '@app/core/utils/error.utils'
 
 @Component({
   selector: 'app-clients',
@@ -43,6 +56,9 @@ export class ClientsComponent implements OnInit {
   readonly clientsStore = inject(ClientsStore)
   readonly router = inject(Router)
   readonly route = inject(ActivatedRoute)
+  readonly clientsHttpService = inject(ClientsHttpService)
+  readonly destroyRef = inject(DestroyRef)
+  readonly messageService = inject(MessageService)
 
   readonly imageBaseUrl = environment.imageBaseUrl
   readonly tableHeaders = [
@@ -60,6 +76,7 @@ export class ClientsComponent implements OnInit {
   readonly ClientsSortBy = ClientsSortBy
 
   isModalShown = signal(false)
+  isClientDataProcessing = signal(false)
 
   ngOnInit(): void {
     const filterQuery = this.clientsStore.filter
@@ -100,6 +117,43 @@ export class ClientsComponent implements OnInit {
 
   onAddButtonClick() {
     this.isModalShown.set(true)
+  }
+
+  onAddClient(client: CreatedClient) {
+    const formData = FormUtils.getFormDataFromObject(client)
+
+    this.clientsHttpService
+      .addClient(formData)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.handleAddClientSuccess()
+        },
+        error: (error) => {
+          this.handleAddClientError(error)
+        },
+      })
+  }
+
+  private handleAddClientSuccess() {
+    this.clientsStore.loadClientsByQuery(this.clientsStore.filter())
+    this.isModalShown.set(false)
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Client added successfully',
+      life: 2000,
+      closeIcon: 'pi pi-times',
+    })
+  }
+
+  private handleAddClientError(error: any) {
+    this.messageService.add({
+      severity: 'error',
+      summary: ErrorHandler.getErrorMessageSummary(error),
+      detail: ErrorHandler.getErrorMessageDetails(error),
+      life: 2000,
+      closeIcon: 'pi pi-times',
+    })
   }
 
   onCloseModal() {

@@ -9,4 +9,14 @@ export class FormUtils {
 
     return trimmedValues
   }
+
+  static getFormDataFromObject(object: { [key: string]: any }): FormData {
+    const formData = new FormData()
+
+    Object.entries(object).forEach(([key, value]) => {
+      formData.append(key, value)
+    })
+
+    return formData
+  }
 }

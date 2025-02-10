@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
 import { environment } from '@environments/environment'
-import { ClientsRequestFilters, ClientsResponse } from '../models/clients-http.model'
+import { ClientsRequestFilters, ClientsResponse } from '@core/models/clients-http.model'
 
 @Injectable({
   providedIn: 'root',
@@ -26,5 +26,9 @@ export class ClientsHttpService {
     })
 
     return params
+  }
+
+  addClient(clientFormData: FormData) {
+    return this.http.post(`${environment.apiUrl}/Clients`, clientFormData)
   }
 }

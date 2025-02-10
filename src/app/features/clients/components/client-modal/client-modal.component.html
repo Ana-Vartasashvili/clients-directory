@@ -22,30 +22,30 @@
       />
 
       <div class="flex gap-3 w-full">
-        <app-input name="FirstName" label="First Name" class="w-full" formControlName="FirstName" />
-        <app-input name="LastName" label="Last Name" class="w-full" formControlName="LastName" />
+        <app-input name="firstName" label="First Name" class="w-full" formControlName="firstName" />
+        <app-input name="lastName" label="Last Name" class="w-full" formControlName="lastName" />
       </div>
 
       <div class="flex gap-3 w-full">
         <app-input
-          name="DocumentId"
+          name="documentId"
           label="Document Id"
           class="w-full"
-          formControlName="DocumentId"
+          formControlName="documentId"
         />
         <app-input
-          name="PhoneNumber"
+          name="phoneNumber"
           label="Phone number"
           type="number"
           class="w-full"
-          formControlName="PhoneNumber"
+          formControlName="phoneNumber"
         />
       </div>
 
       <div class="flex flex-wrap gap-4">
         @for(gender of genders; track gender){
         <div class="flex items-center">
-          <p-radiobutton [value]="gender.code" [inputId]="gender.name" formControlName="Gender" />
+          <p-radiobutton [value]="gender.code" [inputId]="gender.name" formControlName="gender" />
           <label [for]="gender.name" class="ml-2">{{ gender.name }}</label>
         </div>
         }
@@ -56,23 +56,23 @@
 
         <div class="flex gap-3 w-full mb-6">
           <app-input
-            name="LegalAddressCountry"
+            name="legalAddressCountry"
             label="Country"
             class="w-full"
-            formControlName="LegalAddressCountry"
+            formControlName="legalAddressCountry"
           />
           <app-input
-            name="LegalAddressCity"
+            name="legalAddressCity"
             label="City"
             class="w-full"
-            formControlName="LegalAddressCity"
+            formControlName="legalAddressCity"
           />
         </div>
 
         <app-input
-          name="LegalAddressLine"
+          name="legalAddressLine"
           label="Full address"
-          formControlName="LegalAddressLine"
+          formControlName="legalAddressLine"
         />
       </div>
 
@@ -83,30 +83,36 @@
 
         <div class="flex gap-3 w-full mb-6">
           <app-input
-            name="ActualAddressCountry"
+            name="actualAddressCountry"
             label="Country"
             class="w-full"
-            formControlName="ActualAddressCountry"
+            formControlName="actualAddressCountry"
           />
           <app-input
-            name="ActualAddressCity"
+            name="actualAddressCity"
             label="City"
             class="w-full"
-            formControlName="ActualAddressCity"
+            formControlName="actualAddressCity"
           />
         </div>
 
         <app-input
-          name="ActualAddressLine"
+          name="actualAddressLine"
           label="Full address"
-          formControlName="ActualAddressLine"
+          formControlName="actualAddressLine"
         />
       </div>
     </div>
 
     <div class="flex justify-end gap-2">
-      <p-button label="Cancel" severity="secondary" />
-      <p-button label="Save" [disabled]="clientForm.invalid" />
+      <p-button label="Cancel" severity="secondary" (onClick)="onCloseModal()" />
+      <p-button
+        label="Save"
+        [disabled]="clientForm.invalid || isLoading"
+        [loading]="isLoading"
+        loadingIcon="pi pi-spin pi-spinner"
+        (onClick)="onSubmit()"
+      />
     </div>
   </form>
 </p-dialog>

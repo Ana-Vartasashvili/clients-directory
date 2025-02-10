@@ -18,9 +18,10 @@ import { RadioButtonModule } from 'primeng/radiobutton'
 import { AccordionModule } from 'primeng/accordion'
 import { DividerModule } from 'primeng/divider'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
-import { ClientGender } from '@app/core/models/client.model'
+import { ClientGender, CreatedClient } from '@app/core/models/client.model'
 import { InputComponent } from '@app/shared/components/input/input.component'
 import { AppValidators } from '@app/shared/validators/app-validators'
+import { FormUtils } from '@app/core/utils/form.utils'
 
 @Component({
   selector: 'app-client-modal',
@@ -45,8 +46,10 @@ export class ClientModalComponent implements OnInit {
   fb = inject(FormBuilder)
 
   @Input() isVisible = false
+  @Input() isLoading = false
 
   @Output() closeModal = new EventEmitter<void>()
+  @Output() submit = new EventEmitter<CreatedClient>()
 
   readonly genders = GENDERS
   clientForm!: FormGroup
@@ -57,17 +60,17 @@ export class ClientModalComponent implements OnInit {
 
   private initForm() {
     return this.fb.group({
-      FirstName: ['', this.getNameValidators()],
-      LastName: ['', this.getNameValidators()],
-      Gender: ClientGender.Male,
-      DocumentId: ['', this.getDocumentIdValidators()],
-      PhoneNumber: [null, this.getPhoneNumberValidators()],
-      LegalAddressCountry: ['', this.getBaseValidators()],
-      LegalAddressCity: ['', this.getBaseValidators()],
-      LegalAddressLine: ['', this.getBaseValidators()],
-      ActualAddressCountry: ['', this.getBaseValidators()],
-      ActualAddressCity: ['', this.getBaseValidators()],
-      ActualAddressLine: ['', this.getBaseValidators()],
+      firstName: ['', this.getNameValidators()],
+      lastName: ['', this.getNameValidators()],
+      gender: ClientGender.Male,
+      documentId: ['', this.getDocumentIdValidators()],
+      phoneNumber: [null, this.getPhoneNumberValidators()],
+      legalAddressCountry: ['', this.getBaseValidators()],
+      legalAddressCity: ['', this.getBaseValidators()],
+      legalAddressLine: ['', this.getBaseValidators()],
+      actualAddressCountry: ['', this.getBaseValidators()],
+      actualAddressCity: ['', this.getBaseValidators()],
+      actualAddressLine: ['', this.getBaseValidators()],
     })
   }
 
@@ -85,7 +88,7 @@ export class ClientModalComponent implements OnInit {
   }
 
   private getDocumentIdValidators() {
-    return [...this.getBaseValidators(), AppValidators.onlyNumbers, AppValidators.maxLength(11)]
+    return [...this.getBaseValidators(), AppValidators.onlyNumbers, AppValidators.length(11)]
   }
 
   private getPhoneNumberValidators() {
@@ -94,5 +97,10 @@ export class ClientModalComponent implements OnInit {
 
   onCloseModal() {
     this.closeModal.emit()
+  }
+
+  onSubmit() {
+    const trimmedFormValues = FormUtils.trimFormValues(this.clientForm.value)
+    this.submit.emit(trimmedFormValues as CreatedClient)
   }
 }

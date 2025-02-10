@@ -18,3 +18,5 @@ export enum ClientGender {
   Male,
   Female,
 }
+
+export type CreatedClient = Omit<Client, 'id' | 'profileImageUrl'>

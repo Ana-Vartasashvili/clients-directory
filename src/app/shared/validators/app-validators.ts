@@ -15,6 +15,13 @@ export class AppValidators extends Validators {
         : undefined
   }
 
+  static override length(length: number): any {
+    return (control: AbstractControl) => {
+      if (control.value == null) return null
+      return control.value.length === length ? null : { length: `Field length must be ${length}.` }
+    }
+  }
+
   static override required(control: AbstractControl): any {
     return super.required(control) ? { required: 'Field is required.' } : undefined
   }

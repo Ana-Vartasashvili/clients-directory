@@ -21,5 +21,12 @@
 
   <p-toast></p-toast>
 
-  <app-client-modal [isVisible]="isModalShown()" (closeModal)="onCloseModal()" />
+  @if(isModalShown()){
+  <app-client-modal
+    [isVisible]="isModalShown()"
+    (closeModal)="onCloseModal()"
+    (submit)="onAddClient($event)"
+    [isLoading]="isClientDataProcessing()"
+  />
+  }
 </p-panel>

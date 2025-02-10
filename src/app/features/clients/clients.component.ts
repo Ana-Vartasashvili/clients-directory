@@ -30,9 +30,9 @@ import { ClientModalComponent } from './components/client-modal/client-modal.com
 import { CreatedClient } from '@app/core/models/client.model'
 import { ClientsHttpService } from '@app/core/services/clients-http.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { MessageService } from 'primeng/api'
 import { FormUtils } from '@app/core/utils/form.utils'
 import { ErrorHandler } from '@app/core/utils/error.utils'
+import { ToastService } from '@app/core/services/toast.service'
 
 @Component({
   selector: 'app-clients',
@@ -58,7 +58,7 @@ export class ClientsComponent implements OnInit {
   readonly route = inject(ActivatedRoute)
   readonly clientsHttpService = inject(ClientsHttpService)
   readonly destroyRef = inject(DestroyRef)
-  readonly messageService = inject(MessageService)
+  readonly toastService = inject(ToastService)
 
   readonly imageBaseUrl = environment.imageBaseUrl
   readonly tableHeaders = [
@@ -138,22 +138,14 @@ export class ClientsComponent implements OnInit {
   private handleAddClientSuccess() {
     this.clientsStore.loadClientsByQuery(this.clientsStore.filter())
     this.isModalShown.set(false)
-    this.messageService.add({
-      severity: 'success',
-      summary: 'Client added successfully',
-      life: 2000,
-      closeIcon: 'pi pi-times',
-    })
+    this.toastService.success('Client added successfully')
   }
 
   private handleAddClientError(error: any) {
-    this.messageService.add({
-      severity: 'error',
-      summary: ErrorHandler.getErrorMessageSummary(error),
-      detail: ErrorHandler.getErrorMessageDetails(error),
-      life: 2000,
-      closeIcon: 'pi pi-times',
-    })
+    this.toastService.error(
+      ErrorHandler.getErrorMessageSummary(error),
+      ErrorHandler.getErrorMessageDetails(error)
+    )
   }
 
   onCloseModal() {

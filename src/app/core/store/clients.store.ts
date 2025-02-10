@@ -1,14 +1,14 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals'
-import { Client } from '../models/client.model'
+import { Client } from '@core/models/client.model'
 import { inject } from '@angular/core'
-import { ClientsHttpService } from '../services/clients-http.service'
+import { ClientsHttpService } from '@core/services/clients-http.service'
 import { rxMethod } from '@ngrx/signals/rxjs-interop'
 import { pipe, distinctUntilChanged, tap, switchMap, delay } from 'rxjs'
 import { tapResponse } from '@ngrx/operators'
 import { ClientsRequestFilters } from '../models/clients-http.model'
 import { Router } from '@angular/router'
-import { MessageService } from 'primeng/api'
 import { ErrorHandler } from '@utils/error.utils'
+import { ToastService } from '@core/services/toast.service'
 
 type ClientState = {
   clients: Client[]
@@ -36,7 +36,7 @@ export const ClientsStore = signalStore(
       store,
       clientsHttpService = inject(ClientsHttpService),
       router = inject(Router),
-      messageService = inject(MessageService)
+      toastService = inject(ToastService)
     ) => ({
       updateFilterQuery: rxMethod<ClientsRequestFilters>(
         tap((filters) => {
@@ -58,13 +58,10 @@ export const ClientsStore = signalStore(
                 next: ({ items, totalCount }) => patchState(store, { clients: items, totalCount }),
                 error: (error) => {
                   patchState(store, { clients: [] })
-                  messageService.add({
-                    severity: 'error',
-                    summary: ErrorHandler.getErrorMessageSummary(error),
-                    detail: ErrorHandler.getErrorMessageDetails(error),
-                    life: 2000,
-                    closeIcon: 'pi pi-times',
-                  })
+                  toastService.error(
+                    ErrorHandler.getErrorMessageSummary(error),
+                    ErrorHandler.getErrorMessageDetails(error)
+                  )
                 },
                 finalize: () => patchState(store, { isLoading: false }),
               })

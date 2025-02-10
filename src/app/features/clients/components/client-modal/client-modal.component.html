@@ -6,7 +6,7 @@
   (visibleChange)="onCloseModal()"
 >
   <form [formGroup]="clientForm">
-    <div class="mt-2 flex flex-col gap-y-5 mb-7">
+    <div class="mt-2 flex flex-col gap-y-6 mb-7">
       <p-fileupload
         #fu
         mode="advanced"
@@ -22,19 +22,19 @@
       />
 
       <div class="flex gap-3 w-full">
-        <app-input name="firstName" label="First Name" class="w-full" formControlName="FirstName" />
-        <app-input name="lastName" label="Last Name" class="w-full" formControlName="LastName" />
+        <app-input name="FirstName" label="First Name" class="w-full" formControlName="FirstName" />
+        <app-input name="LastName" label="Last Name" class="w-full" formControlName="LastName" />
       </div>
 
       <div class="flex gap-3 w-full">
         <app-input
-          name="documentId"
+          name="DocumentId"
           label="Document Id"
           class="w-full"
           formControlName="DocumentId"
         />
         <app-input
-          name="phoneNumber"
+          name="PhoneNumber"
           label="Phone number"
           type="number"
           class="w-full"
@@ -54,15 +54,15 @@
       <div>
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Legal address</h3>
 
-        <div class="flex gap-3 w-full mb-5">
+        <div class="flex gap-3 w-full mb-6">
           <app-input
-            name="legalAddressCountry"
+            name="LegalAddressCountry"
             label="Country"
             class="w-full"
             formControlName="LegalAddressCountry"
           />
           <app-input
-            name="legalAddressCity"
+            name="LegalAddressCity"
             label="City"
             class="w-full"
             formControlName="LegalAddressCity"
@@ -70,7 +70,7 @@
         </div>
 
         <app-input
-          name="legalAddressLine"
+          name="LegalAddressLine"
           label="Full address"
           formControlName="LegalAddressLine"
         />
@@ -81,15 +81,15 @@
       <div>
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Actual address</h3>
 
-        <div class="flex gap-3 w-full mb-5">
+        <div class="flex gap-3 w-full mb-6">
           <app-input
-            name="actualAddressCountry"
+            name="ActualAddressCountry"
             label="Country"
             class="w-full"
             formControlName="ActualAddressCountry"
           />
           <app-input
-            name="actualAddressCity"
+            name="ActualAddressCity"
             label="City"
             class="w-full"
             formControlName="ActualAddressCity"
@@ -97,7 +97,7 @@
         </div>
 
         <app-input
-          name="actualAddressLine"
+          name="ActualAddressLine"
           label="Full address"
           formControlName="ActualAddressLine"
         />
@@ -106,7 +106,7 @@
 
     <div class="flex justify-end gap-2">
       <p-button label="Cancel" severity="secondary" />
-      <p-button label="Save" />
+      <p-button label="Save" [disabled]="clientForm.invalid" />
     </div>
   </form>
 </p-dialog>

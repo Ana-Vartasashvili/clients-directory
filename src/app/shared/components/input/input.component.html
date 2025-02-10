@@ -1,0 +1,20 @@
+<div class="relative">
+  <p-floatlabel variant="on">
+    <input
+      pInputText
+      [type]="type"
+      [id]="name"
+      autocomplete="off"
+      class="w-full"
+      [ngClass]="{ 'ng-invalid ng-dirty': isInvalidAndTouched() }"
+      [disabled]="disabled"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+    />
+    <label [for]="name">{{ label }}</label>
+  </p-floatlabel>
+
+  @if(isInvalidAndTouched() && !!getFormControl()?.errors){
+  <p class="absolute text-red-500 text-[11px] -bottom-4">{{ errorMessage() }}</p>
+  }
+</div>

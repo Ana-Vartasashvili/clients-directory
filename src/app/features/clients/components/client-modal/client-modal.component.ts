@@ -19,7 +19,8 @@ import { AccordionModule } from 'primeng/accordion'
 import { DividerModule } from 'primeng/divider'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ClientGender } from '@app/core/models/client.model'
-import { InputComponent } from '@app/features/shared/components/input/input.component'
+import { InputComponent } from '@app/shared/components/input/input.component'
+import { AppValidators } from '@app/shared/validators/app-validators'
 
 @Component({
   selector: 'app-client-modal',
@@ -56,18 +57,39 @@ export class ClientModalComponent implements OnInit {
 
   private initForm() {
     return this.fb.group({
-      FirstName: '',
-      LastName: '',
+      FirstName: ['', this.getNameValidators()],
+      LastName: ['', this.getNameValidators()],
       Gender: ClientGender.Male,
-      DocumentId: '',
-      PhoneNumber: null,
-      LegalAddressCountry: '',
-      LegalAddressCity: '',
-      LegalAddressLine: '',
-      ActualAddressCountry: '',
-      ActualAddressCity: '',
-      ActualAddressLine: '',
+      DocumentId: ['', this.getDocumentIdValidators()],
+      PhoneNumber: [null, this.getPhoneNumberValidators()],
+      LegalAddressCountry: ['', this.getBaseValidators()],
+      LegalAddressCity: ['', this.getBaseValidators()],
+      LegalAddressLine: ['', this.getBaseValidators()],
+      ActualAddressCountry: ['', this.getBaseValidators()],
+      ActualAddressCity: ['', this.getBaseValidators()],
+      ActualAddressLine: ['', this.getBaseValidators()],
     })
+  }
+
+  private getBaseValidators() {
+    return [AppValidators.required, AppValidators.noWhiteSpaces]
+  }
+
+  private getNameValidators() {
+    return [
+      ...this.getBaseValidators(),
+      AppValidators.minLength(2),
+      AppValidators.maxLength(50),
+      AppValidators.onlyGeorgianOrLatin,
+    ]
+  }
+
+  private getDocumentIdValidators() {
+    return [...this.getBaseValidators(), AppValidators.onlyNumbers, AppValidators.maxLength(11)]
+  }
+
+  private getPhoneNumberValidators() {
+    return [AppValidators.required, AppValidators.validPhoneNumber]
   }
 
   onCloseModal() {

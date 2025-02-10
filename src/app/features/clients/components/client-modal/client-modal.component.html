@@ -22,60 +22,13 @@
       />
 
       <div class="flex gap-3 w-full">
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              type="text"
-              pInputText
-              id="FirstName"
-              autocomplete="off"
-              class="w-full"
-              formControlName="FirstName"
-            />
-            <label for="FirstName">First name</label>
-          </p-floatlabel>
-        </div>
-
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="LastName"
-              autocomplete="off"
-              class="w-full"
-              formControlName="LastName"
-            />
-            <label for="LastName">Last name</label>
-          </p-floatlabel>
-        </div>
+        <app-input name="firstName" label="First Name" class="w-full" />
+        <app-input name="lastName" label="Last Name" class="w-full" />
       </div>
 
       <div class="flex gap-3 w-full">
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="DocumentId"
-              autocomplete="off"
-              class="w-full"
-              formControlName="DocumentId"
-            />
-            <label for="DocumentId">Document Id</label>
-          </p-floatlabel>
-        </div>
-
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="PhoneNumber"
-              autocomplete="off"
-              class="w-full"
-              formControlName="PhoneNumber"
-            />
-            <label for="PhoneNumber">Phone number</label>
-          </p-floatlabel>
-        </div>
+        <app-input name="documentId" label="Document Id" class="w-full" />
+        <app-input name="phoneNumber" label="Phone number" type="number" class="w-full" />
       </div>
 
       <div class="flex flex-wrap gap-4">
@@ -91,45 +44,10 @@
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Legal address</h3>
 
         <div class="flex gap-3 w-full mb-5">
-          <div class="w-full">
-            <p-floatlabel variant="on">
-              <input
-                pInputText
-                id="LegalAddressCountry"
-                autocomplete="off"
-                class="w-full"
-                formControlName="LegalAddressCountry"
-              />
-              <label for="LegalAddressCountry">Country</label>
-            </p-floatlabel>
-          </div>
-
-          <div class="w-full">
-            <p-floatlabel variant="on">
-              <input
-                pInputText
-                id="LegalAddressCity"
-                autocomplete="off"
-                class="w-full"
-                formControlName="LegalAddressCity"
-              />
-              <label for="LegalAddressCity">City</label>
-            </p-floatlabel>
-          </div>
+          <app-input name="legalAddressCountry" label="Country" class="w-full" />
+          <app-input name="legalAddressCity" label="City" class="w-full" />
         </div>
-
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="LegalAddressLine"
-              autocomplete="off"
-              class="w-full"
-              formControlName="LegalAddressLine"
-            />
-            <label for="LegalAddressLine">Full address</label>
-          </p-floatlabel>
-        </div>
+        <app-input name="legalAddressLine" label="Full address" />
       </div>
 
       <p-divider styleClass="m-1!" />
@@ -138,45 +56,10 @@
         <h3 class="font-semibold w-24 whitespace-nowrap mb-3">Actual address</h3>
 
         <div class="flex gap-3 w-full mb-5">
-          <div class="w-full">
-            <p-floatlabel variant="on">
-              <input
-                pInputText
-                id="ActualAddressCountry"
-                autocomplete="off"
-                class="w-full"
-                formControlName="ActualAddressCountry"
-              />
-              <label for="ActualAddressCountry">Country</label>
-            </p-floatlabel>
-          </div>
-
-          <div class="w-full">
-            <p-floatlabel variant="on">
-              <input
-                pInputText
-                id="ActualAddressCity"
-                autocomplete="off"
-                class="w-full"
-                formControlName="ActualAddressCity"
-              />
-              <label for="ActualAddressCity">City</label>
-            </p-floatlabel>
-          </div>
+          <app-input name="actualAddressCountry" label="Country" class="w-full" />
+          <app-input name="actualAddressCity" label="City" class="w-full" />
         </div>
-
-        <div class="w-full">
-          <p-floatlabel variant="on">
-            <input
-              pInputText
-              id="ActualAddressLine"
-              autocomplete="off"
-              class="w-full"
-              formControlName="ActualAddressLine"
-            />
-            <label for="ActualAddressLine">Full address</label>
-          </p-floatlabel>
-        </div>
+        <app-input name="actualAddressLine" label="Full address" />
       </div>
     </div>
 

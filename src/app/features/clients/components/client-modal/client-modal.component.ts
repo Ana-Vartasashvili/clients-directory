@@ -19,6 +19,7 @@ import { AccordionModule } from 'primeng/accordion'
 import { DividerModule } from 'primeng/divider'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ClientGender } from '@app/core/models/client.model'
+import { InputComponent } from '@app/features/shared/components/input/input.component'
 
 @Component({
   selector: 'app-client-modal',
@@ -33,6 +34,7 @@ import { ClientGender } from '@app/core/models/client.model'
     AccordionModule,
     DividerModule,
     ReactiveFormsModule,
+    InputComponent,
   ],
   templateUrl: './client-modal.component.html',
   styleUrl: './client-modal.component.scss',

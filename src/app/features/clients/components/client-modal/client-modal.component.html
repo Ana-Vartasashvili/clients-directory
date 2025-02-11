@@ -19,6 +19,8 @@
         previewWidth="50"
         styleClass="h-fit-content flex justify-center flex-col items-center"
         maxFileSize="1000000"
+        (onSelect)="onFileUpload($event)"
+        (onRemove)="onFileRemove()"
       />
 
       <div class="flex gap-3 w-full">

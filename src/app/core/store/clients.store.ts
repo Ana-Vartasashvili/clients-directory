@@ -47,7 +47,6 @@ export const ClientsStore = signalStore(
 
       loadClientsByQuery: rxMethod<ClientsRequestFilters>(
         pipe(
-          distinctUntilChanged(),
           tap(() => {
             patchState(store, { isLoading: true })
           }),

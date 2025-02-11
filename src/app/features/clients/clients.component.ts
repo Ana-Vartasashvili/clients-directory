@@ -17,7 +17,7 @@ import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { ClientsRequestFilters, ClientsSortBy } from '@app/core/models/clients-http.model'
 import { ActivatedRoute, Router } from '@angular/router'
-import { take } from 'rxjs'
+import { finalize, take } from 'rxjs'
 import {
   DEFAULT_PAGE_SIZE,
   FILTERS_NOT_TO_RESET,
@@ -120,11 +120,15 @@ export class ClientsComponent implements OnInit {
   }
 
   onAddClient(client: CreatedClient) {
+    this.isClientDataProcessing.set(true)
     const formData = FormUtils.getFormDataFromObject(client)
 
     this.clientsHttpService
       .addClient(formData)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isClientDataProcessing.set(false))
+      )
       .subscribe({
         next: () => {
           this.handleAddClientSuccess()
@@ -136,7 +140,7 @@ export class ClientsComponent implements OnInit {
   }
 
   private handleAddClientSuccess() {
-    this.clientsStore.loadClientsByQuery(this.clientsStore.filter())
+    this.clientsStore.updateFilterQuery({ Page: 1 })
     this.isModalShown.set(false)
     this.toastService.success('Client added successfully')
   }

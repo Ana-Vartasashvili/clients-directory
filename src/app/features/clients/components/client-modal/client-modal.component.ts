@@ -13,7 +13,7 @@ import { InputTextModule } from 'primeng/inputtext'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { SelectModule } from 'primeng/select'
 import { GENDERS } from '@app/core/constants/constants'
-import { FileUploadModule } from 'primeng/fileupload'
+import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload'
 import { RadioButtonModule } from 'primeng/radiobutton'
 import { AccordionModule } from 'primeng/accordion'
 import { DividerModule } from 'primeng/divider'
@@ -53,9 +53,13 @@ export class ClientModalComponent implements OnInit {
 
   readonly genders = GENDERS
   clientForm!: FormGroup
+  selectedFile: File | null = null
 
   ngOnInit(): void {
     this.clientForm = this.initForm()
+    this.clientForm.valueChanges.subscribe((value) => {
+      console.log(value)
+    })
   }
 
   private initForm() {
@@ -71,6 +75,7 @@ export class ClientModalComponent implements OnInit {
       actualAddressCountry: ['', this.getBaseValidators()],
       actualAddressCity: ['', this.getBaseValidators()],
       actualAddressLine: ['', this.getBaseValidators()],
+      profileImage: [null],
     })
   }
 
@@ -95,12 +100,25 @@ export class ClientModalComponent implements OnInit {
     return [AppValidators.required, AppValidators.validPhoneNumber]
   }
 
+  onFileUpload(event: FileSelectEvent) {
+    const file = event.files[0]
+    if (file) {
+      this.selectedFile = file
+    }
+  }
+
+  onFileRemove() {
+    this.selectedFile = null
+  }
+
   onCloseModal() {
     this.closeModal.emit()
   }
 
   onSubmit() {
     const trimmedFormValues = FormUtils.trimFormValues(this.clientForm.value)
+    trimmedFormValues['profileImage'] = this.selectedFile
+
     this.submit.emit(trimmedFormValues as CreatedClient)
   }
 }

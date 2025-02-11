@@ -1,3 +1,5 @@
+<p-confirmdialog />
+
 <form [formGroup]="filtersForm">
   <p-table
     #dt2
@@ -132,7 +134,7 @@
           </div>
         </td>
 
-        <td class="min-w-7 flex gap-3">
+        <td class="min-w-7 flex gap-3 relative">
           <p-button icon="pi pi-pencil" [outlined]="true" (click)="onEditClick(client)" />
           <p-button
             icon="pi pi-trash"

@@ -134,10 +134,13 @@ export class ClientsComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.handleAddClientSuccess()
+          const successMessage = `Client ${
+            this.modalMode() === 'add' ? 'added' : 'edited'
+          } successfully`
+          this.handleClientRequestSuccess(successMessage)
         },
         error: (error) => {
-          this.handleAddClientError(error)
+          this.handleClientRequestError(error)
         },
       })
   }
@@ -153,15 +156,13 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  private handleAddClientSuccess() {
+  private handleClientRequestSuccess(successMessage: string) {
     this.clientsStore.updateFilterQuery({ Page: 1 })
     this.isModalShown.set(false)
-    this.toastService.success(
-      `Client ${this.modalMode() === 'add' ? 'added' : 'edited'} successfully`
-    )
+    this.toastService.success(successMessage)
   }
 
-  private handleAddClientError(error: any) {
+  private handleClientRequestError(error: any) {
     this.toastService.error(
       ErrorHandler.getErrorMessageSummary(error),
       ErrorHandler.getErrorMessageDetails(error)
@@ -176,5 +177,19 @@ export class ClientsComponent implements OnInit {
     this.modalMode.set('edit')
     this.clientToEdit.set(client)
     this.isModalShown.set(true)
+  }
+
+  onDeleteClick(clientId: number) {
+    this.clientsHttpService
+      .deleteClient(clientId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.handleClientRequestSuccess('Client deleted successfully')
+        },
+        error: (error) => {
+          this.handleClientRequestError(error)
+        },
+      })
   }
 }

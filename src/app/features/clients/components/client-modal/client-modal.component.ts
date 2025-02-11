@@ -161,6 +161,20 @@ export class ClientModalComponent implements OnInit {
   }
 
   onSubmit() {
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to save the changes?',
+      header: 'Save Changes',
+      acceptButtonProps: {
+        label: 'Save',
+        severity: 'primary',
+      },
+      accept: () => {
+        this.handleSubmit()
+      },
+    })
+  }
+
+  private handleSubmit() {
     const trimmedFormValues: CreatedClient = FormUtils.trimFormValues(
       this.clientForm.value
     ) as CreatedClient

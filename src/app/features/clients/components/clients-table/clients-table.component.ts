@@ -20,7 +20,7 @@ import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
 import { AvatarModule } from 'primeng/avatar'
 import { SkeletonModule } from 'primeng/skeleton'
-import { Client, ClientGender, CreatedClient } from '@app/core/models/client.model'
+import { Client, ClientGender } from '@app/core/models/client.model'
 import { environment } from '@environments/environment'
 import { InputNumber } from 'primeng/inputnumber'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
@@ -33,6 +33,8 @@ import { PaginatorModule, PaginatorState } from 'primeng/paginator'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { FILTERS_NOT_TO_RESET, GENDERS } from '@app/core/constants/constants'
 import { ButtonModule } from 'primeng/button'
+import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
 
 @Component({
   selector: 'app-clients-table',
@@ -54,6 +56,7 @@ import { ButtonModule } from 'primeng/button'
     ColumnWithFilterComponent,
     PaginatorModule,
     ButtonModule,
+    ConfirmDialogModule,
   ],
   templateUrl: './clients-table.component.html',
   styleUrl: './clients-table.component.scss',
@@ -63,6 +66,7 @@ export class ClientsTableComponent {
   fb = inject(FormBuilder)
   destroyRef = inject(DestroyRef)
   clientsStore = inject(ClientsStore)
+  confirmationService = inject(ConfirmDialogService)
 
   @Input({ required: true }) clients: Client[] = []
   @Input({ required: true }) isLoading = false
@@ -74,6 +78,7 @@ export class ClientsTableComponent {
   @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
   @Output() pageChange = new EventEmitter<PaginatorState>()
   @Output() editClick = new EventEmitter<Client>()
+  @Output() deleteClick = new EventEmitter<number>()
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
@@ -151,6 +156,16 @@ export class ClientsTableComponent {
   }
 
   onDeleteClick(clientId: number) {
-    // this.clientsStore.deleteClient(clientId)
+    this.confirmationService.confirm({
+      message: 'Are you sure you want to delete this client?',
+      header: 'Delete Client',
+      acceptButtonProps: {
+        severity: 'danger',
+        label: 'Delete',
+      },
+      accept: () => {
+        this.deleteClick.emit(clientId)
+      },
+    })
   }
 }

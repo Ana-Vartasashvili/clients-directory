@@ -35,4 +35,8 @@ export class ClientsHttpService {
   updateClient(id: number, clientFormData: FormData) {
     return this.http.put(`${environment.apiUrl}/Clients/${id}`, clientFormData)
   }
+
+  deleteClient(id: number) {
+    return this.http.delete(`${environment.apiUrl}/Clients/${id}`)
+  }
 }

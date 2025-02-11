@@ -31,4 +31,8 @@ export class ClientsHttpService {
   addClient(clientFormData: FormData) {
     return this.http.post(`${environment.apiUrl}/Clients`, clientFormData)
   }
+
+  updateClient(id: number, clientFormData: FormData) {
+    return this.http.put(`${environment.apiUrl}/Clients/${id}`, clientFormData)
+  }
 }

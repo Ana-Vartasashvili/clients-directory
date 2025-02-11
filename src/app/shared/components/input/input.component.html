@@ -7,6 +7,7 @@
       autocomplete="off"
       class="w-full"
       [ngClass]="{ 'ng-invalid ng-dirty': isInvalidAndTouched() }"
+      [value]="value"
       [disabled]="disabled"
       (input)="onInput($event)"
       (blur)="onBlur()"

@@ -27,7 +27,7 @@ import { ToastModule } from 'primeng/toast'
 import { PaginatorState } from 'primeng/paginator'
 import { ClientsTableHeaderComponent } from '@features/clients/components/clients-table-header/clients-table-header.component'
 import { ClientModalComponent } from './components/client-modal/client-modal.component'
-import { CreatedClient } from '@app/core/models/client.model'
+import { Client, CreatedClient } from '@app/core/models/client.model'
 import { ClientsHttpService } from '@app/core/services/clients-http.service'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
@@ -60,6 +60,9 @@ export class ClientsComponent implements OnInit {
   readonly destroyRef = inject(DestroyRef)
   readonly toastService = inject(ToastService)
 
+  readonly pageSizeOptions = PAGE_SIZE_OPTIONS
+  readonly defaultPageSize = DEFAULT_PAGE_SIZE
+  readonly ClientsSortBy = ClientsSortBy
   readonly imageBaseUrl = environment.imageBaseUrl
   readonly tableHeaders = [
     'Id',
@@ -71,12 +74,10 @@ export class ClientsComponent implements OnInit {
     'Actual Address',
   ]
 
-  readonly pageSizeOptions = PAGE_SIZE_OPTIONS
-  readonly defaultPageSize = DEFAULT_PAGE_SIZE
-  readonly ClientsSortBy = ClientsSortBy
-
   isModalShown = signal(false)
   isClientDataProcessing = signal(false)
+  clientToEdit = signal<Client>({} as Client)
+  modalMode = signal<'add' | 'edit'>('add')
 
   ngOnInit(): void {
     const filterQuery = this.clientsStore.filter
@@ -116,15 +117,17 @@ export class ClientsComponent implements OnInit {
   }
 
   onAddButtonClick() {
+    this.modalMode.set('add')
     this.isModalShown.set(true)
+    this.clientToEdit.set({} as Client)
   }
 
-  onAddClient(client: CreatedClient) {
+  onModalSubmit(client: CreatedClient) {
     this.isClientDataProcessing.set(true)
     const formData = FormUtils.getFormDataFromObject(client)
+    const clientHttpRequest = this.getClientHttpRequest(formData)
 
-    this.clientsHttpService
-      .addClient(formData)
+    clientHttpRequest(formData)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         finalize(() => this.isClientDataProcessing.set(false))
@@ -139,10 +142,23 @@ export class ClientsComponent implements OnInit {
       })
   }
 
+  private getClientHttpRequest(formData: FormData) {
+    if (this.modalMode() === 'add') {
+      return this.clientsHttpService.addClient.bind(this.clientsHttpService, formData)
+    } else {
+      return this.clientsHttpService.updateClient.bind(
+        this.clientsHttpService,
+        this.clientToEdit().id
+      )
+    }
+  }
+
   private handleAddClientSuccess() {
     this.clientsStore.updateFilterQuery({ Page: 1 })
     this.isModalShown.set(false)
-    this.toastService.success('Client added successfully')
+    this.toastService.success(
+      `Client ${this.modalMode() === 'add' ? 'added' : 'edited'} successfully`
+    )
   }
 
   private handleAddClientError(error: any) {
@@ -154,5 +170,11 @@ export class ClientsComponent implements OnInit {
 
   onCloseModal() {
     this.isModalShown.set(false)
+  }
+
+  onEditClick(client: Client) {
+    this.modalMode.set('edit')
+    this.clientToEdit.set(client)
+    this.isModalShown.set(true)
   }
 }

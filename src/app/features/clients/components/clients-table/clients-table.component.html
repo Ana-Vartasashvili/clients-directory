@@ -83,6 +83,8 @@
             </div>
           </app-column-with-filter>
         </th>
+
+        <th class="min-w-12"></th>
       </tr>
     </ng-template>
 
@@ -116,14 +118,34 @@
           </div>
         </td>
         <td>
-          <div class="flex items-center gap-2">
-            <span>{{ getFullAddress(client, 'legal') }}</span>
+          <div class="flex items-center gap-2 whitespace-nowrap">
+            <span class="max-w-54 overflow-hidden text-ellipsis">{{
+              getFullAddress(client, 'legal')
+            }}</span>
           </div>
         </td>
         <td>
-          <div class="flex items-center gap-2">
-            <span>{{ getFullAddress(client, 'actual') }}</span>
+          <div class="flex items-center gap-2 whitespace-nowrap">
+            <span class="max-w-54 overflow-hidden text-ellipsis">{{
+              getFullAddress(client, 'actual')
+            }}</span>
           </div>
+        </td>
+
+        <td class="min-w-7 flex gap-3">
+          <p-button icon="pi pi-pencil" [outlined]="true" (click)="onEditClick(client)" />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            (click)="onDeleteClick(client.id)"
+          />
+          <p-button
+            icon="pi pi-chevron-right"
+            severity="secondary"
+            [outlined]="true"
+            (click)="onDeleteClick(client.id)"
+          />
         </td>
       </tr>
     </ng-template>

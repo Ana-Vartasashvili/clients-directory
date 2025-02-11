@@ -15,8 +15,8 @@ export interface Client {
 }
 
 export enum ClientGender {
+  Female = 1,
   Male,
-  Female,
 }
 
 export type CreatedClient = Omit<Client, 'id'> & { profileImage: File | null }

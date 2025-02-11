@@ -20,7 +20,7 @@ import { TableModule } from 'primeng/table'
 import { PanelModule } from 'primeng/panel'
 import { AvatarModule } from 'primeng/avatar'
 import { SkeletonModule } from 'primeng/skeleton'
-import { Client, ClientGender } from '@app/core/models/client.model'
+import { Client, ClientGender, CreatedClient } from '@app/core/models/client.model'
 import { environment } from '@environments/environment'
 import { InputNumber } from 'primeng/inputnumber'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
@@ -32,6 +32,7 @@ import { FormUtils } from '@app/core/utils/form.utils'
 import { PaginatorModule, PaginatorState } from 'primeng/paginator'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { FILTERS_NOT_TO_RESET, GENDERS } from '@app/core/constants/constants'
+import { ButtonModule } from 'primeng/button'
 
 @Component({
   selector: 'app-clients-table',
@@ -52,6 +53,7 @@ import { FILTERS_NOT_TO_RESET, GENDERS } from '@app/core/constants/constants'
     InputTextModule,
     ColumnWithFilterComponent,
     PaginatorModule,
+    ButtonModule,
   ],
   templateUrl: './clients-table.component.html',
   styleUrl: './clients-table.component.scss',
@@ -71,6 +73,7 @@ export class ClientsTableComponent {
 
   @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
   @Output() pageChange = new EventEmitter<PaginatorState>()
+  @Output() editClick = new EventEmitter<Client>()
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
@@ -141,5 +144,13 @@ export class ClientsTableComponent {
 
   onPageChange(paginatorState: PaginatorState) {
     this.pageChange.emit(paginatorState)
+  }
+
+  onEditClick(client: Client) {
+    this.editClick.emit(client)
+  }
+
+  onDeleteClick(clientId: number) {
+    // this.clientsStore.deleteClient(clientId)
   }
 }

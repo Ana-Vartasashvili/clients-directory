@@ -19,7 +19,7 @@ import { RadioButtonModule } from 'primeng/radiobutton'
 import { AccordionModule } from 'primeng/accordion'
 import { DividerModule } from 'primeng/divider'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
-import { ClientGender, CreatedClient } from '@app/core/models/client.model'
+import { Client, ClientGender, CreatedClient } from '@app/core/models/client.model'
 import { InputComponent } from '@app/shared/components/input/input.component'
 import { AppValidators } from '@app/shared/validators/app-validators'
 import { FormUtils } from '@app/core/utils/form.utils'
@@ -28,6 +28,8 @@ import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
 import { NavigationEnd, Router } from '@angular/router'
 import { filter } from 'rxjs'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { AvatarModule } from 'primeng/avatar'
+import { environment } from '@environments/environment'
 
 @Component({
   selector: 'app-client-modal',
@@ -44,6 +46,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
     ReactiveFormsModule,
     InputComponent,
     ConfirmDialogModule,
+    AvatarModule,
   ],
   templateUrl: './client-modal.component.html',
   styleUrl: './client-modal.component.scss',
@@ -57,13 +60,23 @@ export class ClientModalComponent implements OnInit {
 
   @Input() isVisible = false
   @Input() isLoading = false
+  @Input() client = {} as Client
+  @Input() mode: 'add' | 'edit' = 'add'
 
   @Output() closeModal = new EventEmitter<void>()
   @Output() submit = new EventEmitter<CreatedClient>()
 
   readonly genders = GENDERS
+  readonly imageBaseUrl = environment.imageBaseUrl
+
   clientForm!: FormGroup
   selectedFile: File | null = null
+
+  get profileImage() {
+    return this.client?.profileImageUrl
+      ? this.imageBaseUrl + this.client.profileImageUrl
+      : undefined
+  }
 
   ngOnInit(): void {
     this.clientForm = this.initForm()
@@ -80,17 +93,17 @@ export class ClientModalComponent implements OnInit {
 
   private initForm() {
     return this.fb.group({
-      firstName: ['', this.getNameValidators()],
-      lastName: ['', this.getNameValidators()],
-      gender: ClientGender.Male,
-      documentId: ['', this.getDocumentIdValidators()],
-      phoneNumber: [null, this.getPhoneNumberValidators()],
-      legalAddressCountry: ['', this.getBaseValidators()],
-      legalAddressCity: ['', this.getBaseValidators()],
-      legalAddressLine: ['', this.getBaseValidators()],
-      actualAddressCountry: ['', this.getBaseValidators()],
-      actualAddressCity: ['', this.getBaseValidators()],
-      actualAddressLine: ['', this.getBaseValidators()],
+      firstName: [this.client.firstName || '', this.getNameValidators()],
+      lastName: [this.client.lastName || '', this.getNameValidators()],
+      gender: this.client.gender ?? ClientGender.Male,
+      documentId: [this.client.documentId || '', this.getDocumentIdValidators()],
+      phoneNumber: [this.client.phoneNumber || null, this.getPhoneNumberValidators()],
+      legalAddressCountry: [this.client.legalAddressCountry || '', this.getBaseValidators()],
+      legalAddressCity: [this.client.legalAddressCity || '', this.getBaseValidators()],
+      legalAddressLine: [this.client.legalAddressLine || '', this.getBaseValidators()],
+      actualAddressCountry: [this.client.actualAddressCountry || '', this.getBaseValidators()],
+      actualAddressCity: [this.client.actualAddressCity || '', this.getBaseValidators()],
+      actualAddressLine: [this.client.actualAddressLine || '', this.getBaseValidators()],
       profileImage: [null],
     })
   }
@@ -121,6 +134,12 @@ export class ClientModalComponent implements OnInit {
     if (file) {
       this.selectedFile = file
     }
+  }
+
+  getFileUrl(file: File | null) {
+    if (!file) return ''
+
+    return URL.createObjectURL(file)
   }
 
   onFileRemove() {

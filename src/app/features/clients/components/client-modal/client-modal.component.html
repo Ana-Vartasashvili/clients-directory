@@ -7,6 +7,12 @@
 >
   <form [formGroup]="clientForm">
     <div class="mt-2 flex flex-col gap-y-6 mb-7">
+      @if(getFileUrl(selectedFile) || profileImage){
+      <div class="w-full flex justify-center">
+        <p-avatar [image]="getFileUrl(selectedFile) || profileImage" size="xlarge" shape="circle" />
+      </div>
+      }
+
       <p-fileupload
         #fu
         mode="advanced"

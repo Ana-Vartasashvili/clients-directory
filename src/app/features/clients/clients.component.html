@@ -16,6 +16,7 @@
       [totalRecords]="clientsStore.totalCount()"
       (filtersChange)="onFiltersChange($event)"
       (pageChange)="onPageChange($event)"
+      (editClick)="onEditClick($event)"
     />
   </div>
 
@@ -25,8 +26,10 @@
   <app-client-modal
     [isVisible]="isModalShown()"
     (closeModal)="onCloseModal()"
-    (submit)="onAddClient($event)"
+    (submit)="onModalSubmit($event)"
     [isLoading]="isClientDataProcessing()"
+    [client]="clientToEdit()"
+    [mode]="modalMode()"
   />
   }
 </p-panel>

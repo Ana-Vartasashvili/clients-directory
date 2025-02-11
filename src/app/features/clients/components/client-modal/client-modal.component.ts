@@ -22,6 +22,9 @@ import { ClientGender, CreatedClient } from '@app/core/models/client.model'
 import { InputComponent } from '@app/shared/components/input/input.component'
 import { AppValidators } from '@app/shared/validators/app-validators'
 import { FormUtils } from '@app/core/utils/form.utils'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ConfirmationService } from 'primeng/api'
+import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
 
 @Component({
   selector: 'app-client-modal',
@@ -37,6 +40,7 @@ import { FormUtils } from '@app/core/utils/form.utils'
     DividerModule,
     ReactiveFormsModule,
     InputComponent,
+    ConfirmDialogModule,
   ],
   templateUrl: './client-modal.component.html',
   styleUrl: './client-modal.component.scss',
@@ -44,6 +48,7 @@ import { FormUtils } from '@app/core/utils/form.utils'
 })
 export class ClientModalComponent implements OnInit {
   fb = inject(FormBuilder)
+  confirmationService = inject(ConfirmDialogService)
 
   @Input() isVisible = false
   @Input() isLoading = false
@@ -57,9 +62,6 @@ export class ClientModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientForm = this.initForm()
-    this.clientForm.valueChanges.subscribe((value) => {
-      console.log(value)
-    })
   }
 
   private initForm() {
@@ -112,7 +114,17 @@ export class ClientModalComponent implements OnInit {
   }
 
   onCloseModal() {
-    this.closeModal.emit()
+    if (this.clientForm.dirty || this.selectedFile) {
+      this.confirmationService.confirm({
+        message: 'Are you sure you want to close the form without saving?',
+        header: 'Discard Changes',
+        accept: () => {
+          this.closeModal.emit()
+        },
+      })
+    } else {
+      this.closeModal.emit()
+    }
   }
 
   onSubmit() {

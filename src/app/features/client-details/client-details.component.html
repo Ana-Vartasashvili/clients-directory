@@ -13,13 +13,30 @@
     <h1 class="mt-5 text-xl">{{ clientName }}</h1>
     <p-divider />
 
-    <div class="flex gap-12">
-      @for(item of clientDetailItems; track item.label){
-      <div class="flex flex-col items-center justify-center gap-2">
-        <h3 class="font-semibold">{{ item.label }}</h3>
-        <span>{{ item.value }}</span>
+    <div class="flex gap-8">
+      <div class="flex gap-12">
+        @for(item of clientDetailItems; track item.label){
+        <div class="flex flex-col items-center justify-center gap-2">
+          <h3 class="font-semibold">{{ item.label }}</h3>
+          <span>{{ item.value }}</span>
+        </div>
+        }
       </div>
-      }
+
+      <button pButton pRipple severity="success" outlined (click)="onEditClick()">
+        <span pButtonLabel>Edit client</span>
+      </button>
     </div>
   </div>
 </p-panel>
+
+@if(isModalShown()){
+<app-client-modal
+  [isVisible]="isModalShown()"
+  (closeModal)="onCloseModal()"
+  (submit)="onModalSubmit($event)"
+  [isLoading]="isClientDataProcessing()"
+  [client]="client()"
+  mode="edit"
+/>
+}

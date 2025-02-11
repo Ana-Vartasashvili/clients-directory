@@ -78,6 +78,10 @@ export class ClientModalComponent implements OnInit {
       : undefined
   }
 
+  get modalHeader() {
+    return this.mode === 'add' ? 'Add Client' : 'Edit Client'
+  }
+
   ngOnInit(): void {
     this.clientForm = this.initForm()
 

@@ -1,16 +1,39 @@
-import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core'
 import { ActivatedRoute } from '@angular/router'
-import { Client, ClientGender } from '@app/core/models/client.model'
+import { Client, ClientGender, CreatedClient } from '@app/core/models/client.model'
 import { ClientsStore } from '@app/core/store/clients.store'
 import { environment } from '@environments/environment'
 import { AvatarModule } from 'primeng/avatar'
 import { CardModule } from 'primeng/card'
 import { PanelModule } from 'primeng/panel'
 import { DividerModule } from 'primeng/divider'
+import { ClientModalComponent } from '@features/clients/components/client-modal/client-modal.component'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormUtils } from '@app/core/utils/form.utils'
+import { finalize } from 'rxjs'
+import { ClientsHttpService } from '@app/core/services/clients-http.service'
+import { ErrorHandler } from '@app/core/utils/error.utils'
+import { ToastService } from '@app/core/services/toast.service'
+import { ButtonModule } from 'primeng/button'
 
 @Component({
   selector: 'app-client-details',
-  imports: [CardModule, AvatarModule, PanelModule, DividerModule],
+  imports: [
+    CardModule,
+    AvatarModule,
+    PanelModule,
+    DividerModule,
+    ClientModalComponent,
+    ButtonModule,
+  ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,11 +41,16 @@ import { DividerModule } from 'primeng/divider'
 export class ClientDetailsComponent implements OnInit {
   clientStore = inject(ClientsStore)
   route = inject(ActivatedRoute)
+  clientsHttpService = inject(ClientsHttpService)
+  toastService = inject(ToastService)
+  destroyRef = inject(DestroyRef)
 
   readonly imageBaseUrl = environment.imageBaseUrl
 
   client = signal<Client>({} as Client)
   clientDetailItems: { label: string; value: string | number }[] = []
+  isModalShown = signal(false)
+  isClientDataProcessing = signal(false)
 
   get clientName() {
     return this.client().firstName + ' ' + this.client().lastName
@@ -55,5 +83,46 @@ export class ClientDetailsComponent implements OnInit {
     } else {
       return `${client.actualAddressCountry}, ${client.actualAddressCity}, ${client.actualAddressLine}`
     }
+  }
+
+  onEditClick() {
+    this.isModalShown.set(true)
+  }
+
+  onModalSubmit(client: CreatedClient) {
+    this.isClientDataProcessing.set(true)
+    const formData = FormUtils.getFormDataFromObject(client)
+
+    this.clientsHttpService
+      .updateClient(this.client().id, formData)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isClientDataProcessing.set(false))
+      )
+      .subscribe({
+        next: () => {
+          this.handleClientRequestSuccess('Client edited successfully')
+        },
+        error: (error) => {
+          this.handleClientRequestError(error)
+        },
+      })
+  }
+
+  private handleClientRequestSuccess(successMessage: string) {
+    this.clientStore.updateFilterQuery({ Page: 1 })
+    this.isModalShown.set(false)
+    this.toastService.success(successMessage)
+  }
+
+  private handleClientRequestError(error: any) {
+    this.toastService.error(
+      ErrorHandler.getErrorMessageSummary(error),
+      ErrorHandler.getErrorMessageDetails(error)
+    )
+  }
+
+  onCloseModal() {
+    this.isModalShown.set(false)
   }
 }

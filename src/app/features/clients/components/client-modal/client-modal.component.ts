@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
   Input,
@@ -23,8 +24,10 @@ import { InputComponent } from '@app/shared/components/input/input.component'
 import { AppValidators } from '@app/shared/validators/app-validators'
 import { FormUtils } from '@app/core/utils/form.utils'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
-import { ConfirmationService } from 'primeng/api'
 import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
+import { NavigationEnd, Router } from '@angular/router'
+import { filter } from 'rxjs'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-client-modal',
@@ -49,6 +52,8 @@ import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
 export class ClientModalComponent implements OnInit {
   fb = inject(FormBuilder)
   confirmationService = inject(ConfirmDialogService)
+  router = inject(Router)
+  destroyRef = inject(DestroyRef)
 
   @Input() isVisible = false
   @Input() isLoading = false
@@ -62,6 +67,15 @@ export class ClientModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.clientForm = this.initForm()
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.onCloseModal()
+      })
   }
 
   private initForm() {

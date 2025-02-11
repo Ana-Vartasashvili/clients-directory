@@ -2,6 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { inject, Injectable } from '@angular/core'
 import { environment } from '@environments/environment'
 import { ClientsRequestFilters, ClientsResponse } from '@core/models/clients-http.model'
+import { Client } from '@core/models/client.model'
 
 @Injectable({
   providedIn: 'root',
@@ -38,5 +39,9 @@ export class ClientsHttpService {
 
   deleteClient(id: number) {
     return this.http.delete(`${environment.apiUrl}/Clients/${id}`)
+  }
+
+  getClientById(id: number) {
+    return this.http.get<Client>(`${environment.apiUrl}/Clients/${id}`)
   }
 }

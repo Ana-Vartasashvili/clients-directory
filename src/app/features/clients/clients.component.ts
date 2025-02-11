@@ -192,4 +192,8 @@ export class ClientsComponent implements OnInit {
         },
       })
   }
+
+  onViewDetailsClick(clientId: number) {
+    this.router.navigate([`/clients/${clientId}`])
+  }
 }

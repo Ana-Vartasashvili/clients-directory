@@ -79,6 +79,7 @@ export class ClientsTableComponent {
   @Output() pageChange = new EventEmitter<PaginatorState>()
   @Output() editClick = new EventEmitter<Client>()
   @Output() deleteClick = new EventEmitter<number>()
+  @Output() viewDetailsClick = new EventEmitter<number>()
 
   readonly Gender = ClientGender
   readonly imageBaseUrl = environment.imageBaseUrl
@@ -167,5 +168,9 @@ export class ClientsTableComponent {
         this.deleteClick.emit(clientId)
       },
     })
+  }
+
+  onViewDetailsClick(clientId: number) {
+    this.viewDetailsClick.emit(clientId)
   }
 }

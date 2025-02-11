@@ -146,7 +146,7 @@
             icon="pi pi-chevron-right"
             severity="secondary"
             [outlined]="true"
-            (click)="onDeleteClick(client.id)"
+            (click)="onViewDetailsClick(client.id)"
           />
         </td>
       </tr>
@@ -154,7 +154,7 @@
 
     <ng-template #emptymessage let-columns>
       <tr>
-        <td colspan="7">No clients found.</td>
+        <td colspan="8">No clients found.</td>
       </tr>
     </ng-template>
   </p-table>

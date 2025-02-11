@@ -142,7 +142,9 @@ export class ClientModalComponent implements OnInit {
   }
 
   onSubmit() {
-    const trimmedFormValues = FormUtils.trimFormValues(this.clientForm.value)
+    const trimmedFormValues: CreatedClient = FormUtils.trimFormValues(
+      this.clientForm.value
+    ) as CreatedClient
     trimmedFormValues['profileImage'] = this.selectedFile
 
     this.submit.emit(trimmedFormValues as CreatedClient)

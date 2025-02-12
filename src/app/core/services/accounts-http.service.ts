@@ -10,7 +10,7 @@ export class AccountsHttpService {
   readonly http = inject(HttpClient)
 
   createAccount(clientId: number, account: CreatedAccount) {
-    return this.http.post<Account>(`${environment.apiUrl}/Clients/${clientId}/accounts`, account)
+    return this.http.post<Account>(`${environment.apiUrl}/Clients/${11}/accounts`, account)
   }
 
   closeAccount(accountId: number) {

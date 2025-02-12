@@ -29,6 +29,7 @@ import { AccountModalComponent } from './account-modal/account-modal.component'
 import { Account, AccountStatus, CreatedAccount } from '@app/core/models/account.model'
 import { AccountsHttpService } from '@app/core/services/accounts-http.service'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
+import { ToastModule } from 'primeng/toast'
 
 @Component({
   selector: 'app-client-details',
@@ -42,6 +43,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog'
     ClientAccountTableComponent,
     AccountModalComponent,
     ConfirmDialogModule,
+    ToastModule,
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss',

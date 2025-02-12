@@ -17,7 +17,7 @@ import { IconFieldModule } from 'primeng/iconfield'
 import { InputIconModule } from 'primeng/inputicon'
 import { ClientsRequestFilters, ClientsSortBy } from '@app/core/models/clients-http.model'
 import { ActivatedRoute, Router } from '@angular/router'
-import { finalize, take } from 'rxjs'
+import { finalize } from 'rxjs'
 import {
   DEFAULT_PAGE_SIZE,
   FILTERS_NOT_TO_RESET,

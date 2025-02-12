@@ -5,6 +5,8 @@ export class ErrorHandler {
         return 'Bad request'
       case 500:
         return 'Something went wrong'
+      case 404:
+        return 'Not found'
 
       default:
         return 'Something went wrong'
@@ -17,6 +19,8 @@ export class ErrorHandler {
         return this.getValidationErrorMessages(error)
       case 500:
         return 'Internal server error'
+      case 404:
+        return this.getNotFoundErrorMessage(error)
 
       default:
         return 'Please try again later'
@@ -38,5 +42,9 @@ export class ErrorHandler {
     }
 
     return 'Validation error occurred'
+  }
+
+  private static getNotFoundErrorMessage(error: any) {
+    return typeof error?.error === 'string' ? error.error : 'Resource not found'
   }
 }

@@ -13,12 +13,17 @@ export enum AccountType {
 }
 
 export enum Currency {
-  GEL,
+  GEL = 1,
   USD,
   EUR,
 }
 
 export enum AccountStatus {
-  Active,
-  Inactive,
+  Active = 1,
+  Closed,
+}
+
+export interface CreatedAccount {
+  type: AccountType
+  currency: Currency
 }

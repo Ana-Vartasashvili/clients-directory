@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   DestroyRef,
   effect,
@@ -25,6 +26,9 @@ import { ToastService } from '@app/core/services/toast.service'
 import { ButtonModule } from 'primeng/button'
 import { ClientAccountTableComponent } from './client-account-table/client-account-table.component'
 import { ClientDetails } from '@app/core/models/clients-http.model'
+import { AccountModalComponent } from './account-modal/account-modal.component'
+import { Account, CreatedAccount } from '@app/core/models/account.model'
+import { AccountsHttpService } from '@app/core/services/accounts-http.service'
 
 @Component({
   selector: 'app-client-details',
@@ -36,6 +40,7 @@ import { ClientDetails } from '@app/core/models/clients-http.model'
     ClientModalComponent,
     ButtonModule,
     ClientAccountTableComponent,
+    AccountModalComponent,
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss',
@@ -47,13 +52,18 @@ export class ClientDetailsComponent implements OnInit {
   clientsHttpService = inject(ClientsHttpService)
   toastService = inject(ToastService)
   destroyRef = inject(DestroyRef)
+  accountsHttpService = inject(AccountsHttpService)
 
   readonly imageBaseUrl = environment.imageBaseUrl
 
   client = signal<ClientDetails>({} as ClientDetails)
   clientDetailItems: { label: string; value: string | number }[] = []
-  isModalShown = signal(false)
+  isClientModalShown = signal(false)
   isClientDataProcessing = signal(false)
+  isAccountModalShown = signal(false)
+  isAccountDataProcessing = signal(false)
+  clientAccounts = signal<Account[]>([])
+  isAccountsLoading = signal(false)
 
   get clientName() {
     return this.client().firstName + ' ' + this.client().lastName
@@ -74,6 +84,10 @@ export class ClientDetailsComponent implements OnInit {
         { label: 'Actual address', value: this.getFullAddress(this.client(), 'actual') },
       ]
     })
+
+    effect(() => {
+      this.clientAccounts.set(this.client().accounts)
+    })
   }
 
   ngOnInit(): void {
@@ -89,7 +103,7 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   onEditClick() {
-    this.isModalShown.set(true)
+    this.isClientModalShown.set(true)
   }
 
   onModalSubmit(client: CreatedClient) {
@@ -107,25 +121,58 @@ export class ClientDetailsComponent implements OnInit {
           this.handleClientRequestSuccess('Client edited successfully')
         },
         error: (error) => {
-          this.handleClientRequestError(error)
+          this.handleRequestError(error)
         },
       })
   }
 
   private handleClientRequestSuccess(successMessage: string) {
     this.clientStore.updateFilterQuery({ Page: 1 })
-    this.isModalShown.set(false)
+    this.isClientModalShown.set(false)
     this.toastService.success(successMessage)
   }
 
-  private handleClientRequestError(error: any) {
+  private handleRequestError(error: any) {
     this.toastService.error(
       ErrorHandler.getErrorMessageSummary(error),
       ErrorHandler.getErrorMessageDetails(error)
     )
   }
 
-  onCloseModal() {
-    this.isModalShown.set(false)
+  onClientModalClose() {
+    this.isClientModalShown.set(false)
+  }
+
+  onAccountModalClose() {
+    this.isAccountModalShown.set(false)
+  }
+
+  onAddAccountClick() {
+    this.isAccountModalShown.set(true)
+  }
+
+  onAddAccountSubmit(account: CreatedAccount) {
+    this.isAccountDataProcessing.set(true)
+
+    this.accountsHttpService
+      .createAccount(this.client().id, account)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isAccountDataProcessing.set(false))
+      )
+      .subscribe({
+        next: (account) => {
+          this.handleAccountRequestSuccess('Account added successfully', account)
+        },
+        error: (error) => {
+          this.handleRequestError(error)
+        },
+      })
+  }
+
+  private handleAccountRequestSuccess(successMessage: string, account: Account) {
+    this.clientAccounts.set([...this.clientAccounts(), account])
+    this.isAccountModalShown.set(false)
+    this.toastService.success(successMessage)
   }
 }

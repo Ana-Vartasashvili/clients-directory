@@ -32,14 +32,25 @@
   <p-divider />
 
   <div class="mt-8">
-    <app-client-account-table [accounts]="client().accounts" />
+    <app-client-account-table
+      [accounts]="clientAccounts()"
+      [isLoading]="isAccountsLoading()"
+      (addAccountClick)="onAddAccountClick()"
+    />
   </div>
 </p-panel>
 
-@if(isModalShown()){
+@if(isAccountModalShown()){
+<app-account-modal
+  [isVisible]="isAccountModalShown()"
+  [isLoading]="isAccountDataProcessing()"
+  (closeModal)="onAccountModalClose()"
+  (submit)="onAddAccountSubmit($event)"
+/>
+} @if(isClientModalShown()){
 <app-client-modal
-  [isVisible]="isModalShown()"
-  (closeModal)="onCloseModal()"
+  [isVisible]="isClientModalShown()"
+  (closeModal)="onClientModalClose()"
   (submit)="onModalSubmit($event)"
   [isLoading]="isClientDataProcessing()"
   [client]="client()"

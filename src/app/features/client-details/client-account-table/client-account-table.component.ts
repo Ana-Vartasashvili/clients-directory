@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core'
 import { Account, AccountStatus, AccountType, Currency } from '@app/core/models/account.model'
 import { ButtonModule } from 'primeng/button'
 import { TableModule } from 'primeng/table'
@@ -13,6 +13,9 @@ import { TagModule } from 'primeng/tag'
 })
 export class ClientAccountTableComponent {
   @Input() accounts: Account[] = []
+  @Input() isLoading = false
+
+  @Output() addAccountClick = new EventEmitter<void>()
 
   readonly AccountType = AccountType
   readonly AccountStatus = AccountStatus
@@ -34,8 +37,12 @@ export class ClientAccountTableComponent {
     switch (status) {
       case AccountStatus.Active:
         return 'success'
-      case AccountStatus.Inactive:
+      case AccountStatus.Closed:
         return 'danger'
     }
+  }
+
+  onAddAccountClick() {
+    this.addAccountClick.emit()
   }
 }

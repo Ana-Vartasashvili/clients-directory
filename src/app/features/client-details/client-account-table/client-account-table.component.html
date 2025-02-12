@@ -39,7 +39,13 @@
         />
       </td>
       <td>
-        <p-button icon="pi pi-times" severity="danger" [outlined]="true" />
+        <p-button
+          icon="pi pi-times"
+          severity="danger"
+          [outlined]="true"
+          [disabled]="account.status === AccountStatus.Closed"
+          (onClick)="onCloseAccountClick(account.id)"
+        />
       </td>
     </tr>
   </ng-template>
@@ -50,3 +56,5 @@
     </tr>
   </ng-template>
 </p-table>
+
+<p-confirmdialog />

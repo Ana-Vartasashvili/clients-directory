@@ -1,6 +1,5 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   DestroyRef,
   effect,
@@ -27,7 +26,7 @@ import { ButtonModule } from 'primeng/button'
 import { ClientAccountTableComponent } from './client-account-table/client-account-table.component'
 import { ClientDetails } from '@app/core/models/clients-http.model'
 import { AccountModalComponent } from './account-modal/account-modal.component'
-import { Account, CreatedAccount } from '@app/core/models/account.model'
+import { Account, AccountStatus, AccountType, CreatedAccount } from '@app/core/models/account.model'
 import { AccountsHttpService } from '@app/core/services/accounts-http.service'
 
 @Component({
@@ -162,7 +161,7 @@ export class ClientDetailsComponent implements OnInit {
       )
       .subscribe({
         next: (account) => {
-          this.handleAccountRequestSuccess('Account added successfully', account)
+          this.handleAddAccountRequestSuccess('Account added successfully', account)
         },
         error: (error) => {
           this.handleRequestError(error)
@@ -170,8 +169,35 @@ export class ClientDetailsComponent implements OnInit {
       })
   }
 
-  private handleAccountRequestSuccess(successMessage: string, account: Account) {
+  private handleAddAccountRequestSuccess(successMessage: string, account: Account) {
     this.clientAccounts.set([...this.clientAccounts(), account])
+    this.isAccountModalShown.set(false)
+    this.toastService.success(successMessage)
+  }
+
+  onCloseAccountClick(accountId: number) {
+    this.accountsHttpService
+      .closeAccount(accountId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.handleCloseAccountRequestSuccess('Account closed successfully', accountId)
+        },
+        error: (error) => {
+          this.handleRequestError(error)
+        },
+      })
+  }
+
+  private handleCloseAccountRequestSuccess(successMessage: string, accountId: number) {
+    const updatedAccounts = this.clientAccounts().map((account) => {
+      if (account.id === accountId) {
+        account.status = AccountStatus.Closed
+      }
+      return account
+    })
+
+    this.clientAccounts.set(updatedAccounts)
     this.isAccountModalShown.set(false)
     this.toastService.success(successMessage)
   }

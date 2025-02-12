@@ -80,11 +80,9 @@ export class ClientsComponent implements OnInit {
   modalMode = signal<'add' | 'edit'>('add')
 
   ngOnInit(): void {
-    const filterQuery = this.clientsStore.filter
-    this.clientsStore.loadClientsByQuery(filterQuery)
-
-    this.route.queryParams.pipe(take(1)).subscribe((queryParams) => {
+    this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((queryParams) => {
       this.clientsStore.updateFilterQuery(queryParams as ClientsRequestFilters)
+      this.clientsStore.loadClientsByQuery(queryParams)
     })
   }
 

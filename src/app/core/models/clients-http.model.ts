@@ -1,3 +1,4 @@
+import { Account } from './account.model'
 import { Client, ClientGender } from './client.model'
 import { PaginatedResponse } from './paginated-response.model'
 
@@ -25,4 +26,8 @@ export enum ClientsSortBy {
   CreatedAtDesc = 'createdAt_desc',
   lastName = 'lastName',
   lastNameDesc = 'lastName_desc',
+}
+
+export interface ClientDetails extends Client {
+  accounts: Account[]
 }

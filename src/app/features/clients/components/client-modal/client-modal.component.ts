@@ -152,6 +152,7 @@ export class ClientModalComponent implements OnInit {
 
   onCloseModal() {
     if (this.clientForm.dirty || this.selectedFile) {
+      console.log('close')
       this.confirmationService.confirm({
         message: 'Are you sure you want to close the form without saving?',
         header: 'Discard Changes',
@@ -165,6 +166,7 @@ export class ClientModalComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log('submit')
     this.confirmationService.confirm({
       message: 'Are you sure you want to save the changes?',
       header: 'Save Changes',

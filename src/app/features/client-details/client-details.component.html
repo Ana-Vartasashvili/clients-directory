@@ -28,6 +28,12 @@
       </button>
     </div>
   </div>
+
+  <p-divider />
+
+  <div class="mt-8">
+    <app-client-account-table [accounts]="client().accounts" />
+  </div>
 </p-panel>
 
 @if(isModalShown()){

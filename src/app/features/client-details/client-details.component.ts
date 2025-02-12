@@ -23,6 +23,8 @@ import { ClientsHttpService } from '@app/core/services/clients-http.service'
 import { ErrorHandler } from '@app/core/utils/error.utils'
 import { ToastService } from '@app/core/services/toast.service'
 import { ButtonModule } from 'primeng/button'
+import { ClientAccountTableComponent } from './client-account-table/client-account-table.component'
+import { ClientDetails } from '@app/core/models/clients-http.model'
 
 @Component({
   selector: 'app-client-details',
@@ -33,6 +35,7 @@ import { ButtonModule } from 'primeng/button'
     DividerModule,
     ClientModalComponent,
     ButtonModule,
+    ClientAccountTableComponent,
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss',
@@ -47,7 +50,7 @@ export class ClientDetailsComponent implements OnInit {
 
   readonly imageBaseUrl = environment.imageBaseUrl
 
-  client = signal<Client>({} as Client)
+  client = signal<ClientDetails>({} as ClientDetails)
   clientDetailItems: { label: string; value: string | number }[] = []
   isModalShown = signal(false)
   isClientDataProcessing = signal(false)

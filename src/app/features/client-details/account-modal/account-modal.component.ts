@@ -12,13 +12,12 @@ import { CreatedAccount } from '@app/core/models/account.model'
 import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
 import { AppValidators } from '@app/shared/validators/app-validators'
 import { ButtonModule } from 'primeng/button'
-import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { DialogModule } from 'primeng/dialog'
 import { SelectModule } from 'primeng/select'
 
 @Component({
   selector: 'app-account-modal',
-  imports: [DialogModule, ConfirmDialogModule, ButtonModule, SelectModule, ReactiveFormsModule],
+  imports: [DialogModule, ButtonModule, SelectModule, ReactiveFormsModule],
   templateUrl: './account-modal.component.html',
   styleUrl: './account-modal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

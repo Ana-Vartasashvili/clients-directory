@@ -26,8 +26,9 @@ import { ButtonModule } from 'primeng/button'
 import { ClientAccountTableComponent } from './client-account-table/client-account-table.component'
 import { ClientDetails } from '@app/core/models/clients-http.model'
 import { AccountModalComponent } from './account-modal/account-modal.component'
-import { Account, AccountStatus, AccountType, CreatedAccount } from '@app/core/models/account.model'
+import { Account, AccountStatus, CreatedAccount } from '@app/core/models/account.model'
 import { AccountsHttpService } from '@app/core/services/accounts-http.service'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
 
 @Component({
   selector: 'app-client-details',
@@ -40,6 +41,7 @@ import { AccountsHttpService } from '@app/core/services/accounts-http.service'
     ButtonModule,
     ClientAccountTableComponent,
     AccountModalComponent,
+    ConfirmDialogModule,
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.scss',

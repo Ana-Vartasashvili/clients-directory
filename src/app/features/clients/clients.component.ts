@@ -33,6 +33,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
 import { ErrorHandler } from '@app/core/utils/error.utils'
 import { ToastService } from '@app/core/services/toast.service'
+import { ConfirmDialogModule } from 'primeng/confirmdialog'
 
 @Component({
   selector: 'app-clients',
@@ -47,6 +48,7 @@ import { ToastService } from '@app/core/services/toast.service'
     ToastModule,
     ClientsTableHeaderComponent,
     ClientModalComponent,
+    ConfirmDialogModule,
   ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss',

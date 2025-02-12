@@ -9,13 +9,12 @@ import {
 import { Account, AccountStatus, AccountType, Currency } from '@app/core/models/account.model'
 import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
 import { ButtonModule } from 'primeng/button'
-import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { TableModule } from 'primeng/table'
 import { TagModule } from 'primeng/tag'
 
 @Component({
   selector: 'app-client-account-table',
-  imports: [TableModule, ButtonModule, TagModule, ConfirmDialogModule],
+  imports: [TableModule, ButtonModule, TagModule],
   templateUrl: './client-account-table.component.html',
   styleUrl: './client-account-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

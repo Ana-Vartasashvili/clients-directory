@@ -21,6 +21,7 @@
     "@ngrx/operators": "^19.0.1",
     "@ngrx/signals": "^19.0.1",
     "@primeng/themes": "^19.0.6",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/postcss": "^4.0.4",
     "postcss": "^8.5.1",
     "primeicons": "^7.0.0",

@@ -10,7 +10,10 @@
     />
     }
 
-    <h1 class="mt-5 text-xl">{{ clientName }}</h1>
+    <div class="flex gap-5 items-center mt-6">
+      <h1 class="text-xl">{{ clientName }}</h1>
+      <p-button icon="pi pi-pencil" [outlined]="true" (click)="onEditClick()" />
+    </div>
     <p-divider />
 
     <div class="flex gap-8">
@@ -22,10 +25,6 @@
         </div>
         }
       </div>
-
-      <button pButton pRipple severity="success" outlined (click)="onEditClick()">
-        <span pButtonLabel>Edit client</span>
-      </button>
     </div>
   </div>
 

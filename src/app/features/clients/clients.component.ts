@@ -83,8 +83,8 @@ export class ClientsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.queryParams.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((queryParams) => {
-      this.clientsStore.updateFilterQuery(queryParams as ClientsRequestFilters)
       this.clientsStore.loadClientsByQuery(queryParams)
+      this.clientsStore.updateFilterQuery(queryParams as ClientsRequestFilters)
     })
   }
 
@@ -158,6 +158,7 @@ export class ClientsComponent implements OnInit {
 
   private handleClientRequestSuccess(successMessage: string) {
     this.clientsStore.updateFilterQuery({ Page: 1 })
+    this.clientsStore.loadClientsByQuery(this.clientsStore.filter())
     this.isModalShown.set(false)
     this.toastService.success(successMessage)
   }

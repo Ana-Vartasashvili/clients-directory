@@ -13,7 +13,7 @@
     <ng-template #header let-columns>
       <tr>
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Id">
+          <app-column-with-filter columnLabel="Id" [hasBadge]="hasFormControlValue('Id')">
             <p-inputnumber
               placeholder="Id"
               optionLabel="Id"
@@ -24,13 +24,13 @@
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Client">
+          <app-column-with-filter columnLabel="Client" [hasBadge]="hasFormControlValue('Name')">
             <input pInputText placeholder="Client name" formControlName="Name" />
           </app-column-with-filter>
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Gender">
+          <app-column-with-filter columnLabel="Gender" [hasBadge]="hasFormControlValue('Gender')">
             <p-select
               [options]="genders"
               optionLabel="name"
@@ -43,7 +43,10 @@
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Document Id">
+          <app-column-with-filter
+            columnLabel="Document Id"
+            [hasBadge]="hasFormControlValue('DocumentId')"
+          >
             <input
               pInputText
               placeholder="Document Id"
@@ -54,7 +57,10 @@
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Phone Number">
+          <app-column-with-filter
+            columnLabel="Phone Number"
+            [hasBadge]="hasFormControlValue('PhoneNumber')"
+          >
             <input
               pInputText
               placeholder="Phone number"
@@ -65,7 +71,12 @@
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Legal Address">
+          <app-column-with-filter
+            columnLabel="Legal Address"
+            [hasBadge]="
+              hasFormControlValue('LegalAddressCountry', 'LegalAddressCity', 'LegalAddressLine')
+            "
+          >
             <div class="flex items-center gap-2 flex-col">
               <input pInputText placeholder="Country" formControlName="LegalAddressCountry" />
               <input pInputText placeholder="City" formControlName="LegalAddressCity" />
@@ -75,7 +86,12 @@
         </th>
 
         <th class="min-w-7">
-          <app-column-with-filter columnLabel="Actual Address">
+          <app-column-with-filter
+            columnLabel="Actual Address"
+            [hasBadge]="
+              hasFormControlValue('ActualAddressCountry', 'ActualAddressCity', 'ActualAddressLine')
+            "
+          >
             <div class="flex items-center gap-2 flex-col">
               <input pInputText placeholder="Country" formControlName="ActualAddressCountry" />
               <input pInputText placeholder="City" formControlName="ActualAddressCity" />

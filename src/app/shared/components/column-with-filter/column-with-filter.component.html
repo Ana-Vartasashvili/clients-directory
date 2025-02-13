@@ -1,5 +1,11 @@
 <div class="flex items-center">
-  <span class="whitespace-nowrap"> {{ columnLabel }}</span>
+  <div class="whitespace-nowrap relative">
+    <span>{{ columnLabel }}</span>
+
+    @if(hasBadge){
+    <p-badge styleClass="absolute -top-1 -right-2" />
+    }
+  </div>
   <p-columnFilter
     type="text"
     display="menu"

@@ -178,4 +178,8 @@ export class ClientsTableComponent {
   onViewDetailsClick(clientId: number) {
     this.viewDetailsClick.emit(clientId)
   }
+
+  hasFormControlValue(...controlNames: string[]): boolean {
+    return controlNames.some((controlName) => !!this.filtersForm.get(controlName)?.value)
+  }
 }

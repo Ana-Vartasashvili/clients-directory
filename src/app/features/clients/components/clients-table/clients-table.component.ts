@@ -74,6 +74,7 @@ export class ClientsTableComponent {
   @Input({ required: true }) pageSize = 10
   @Input({ required: true }) tableHeaders: string[] = []
   @Input({ required: true }) totalRecords = 0
+  @Input({ required: true }) currentPage = 1
 
   @Output() filtersChange = new EventEmitter<ClientsRequestFilters>()
   @Output() pageChange = new EventEmitter<PaginatorState>()
@@ -86,6 +87,10 @@ export class ClientsTableComponent {
   readonly genders = GENDERS
 
   filtersForm!: FormGroup
+
+  get activePage() {
+    return (this.currentPage - 1) * this.pageSize
+  }
 
   constructor() {
     effect(() => {

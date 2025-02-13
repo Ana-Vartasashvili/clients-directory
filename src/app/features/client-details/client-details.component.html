@@ -17,11 +17,11 @@
     <p-divider />
 
     <div class="flex gap-8">
-      <div class="flex gap-12">
+      <div class="grid grid-rows-1 gap-5 md:flex md:gap-12">
         @for(item of clientDetailItems; track item.label){
         <div class="flex flex-col items-center justify-center gap-2">
-          <h3 class="font-semibold">{{ item.label }}</h3>
-          <span>{{ item.value }}</span>
+          <h3 class="font-semibold text-center">{{ item.label }}</h3>
+          <span class="text-center">{{ item.value }}</span>
         </div>
         }
       </div>

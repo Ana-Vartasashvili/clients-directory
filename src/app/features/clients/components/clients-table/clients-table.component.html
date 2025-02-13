@@ -159,9 +159,11 @@
 
   <div class="mt-4 flex justify-end">
     <p-paginator
+      [first]="activePage"
       [rows]="pageSize"
       [totalRecords]="totalRecords"
       [rowsPerPageOptions]="pageSizeOptions"
+      [pageLinkSize]="3"
       (onPageChange)="onPageChange($event)"
     />
   </div>

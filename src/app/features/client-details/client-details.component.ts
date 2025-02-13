@@ -18,7 +18,7 @@ import { DividerModule } from 'primeng/divider'
 import { ClientModalComponent } from '@features/clients/components/client-modal/client-modal.component'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { FormUtils } from '@app/core/utils/form.utils'
-import { finalize } from 'rxjs'
+import { finalize, Subject } from 'rxjs'
 import { ClientsHttpService } from '@app/core/services/clients-http.service'
 import { ErrorHandler } from '@app/core/utils/error.utils'
 import { ToastService } from '@app/core/services/toast.service'
@@ -30,6 +30,9 @@ import { Account, AccountStatus, CreatedAccount } from '@app/core/models/account
 import { AccountsHttpService } from '@app/core/services/accounts-http.service'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ToastModule } from 'primeng/toast'
+import { CanDeactivateType } from '@app/core/guards/can-deactivate.guard'
+import { ConfirmDialogService } from '@app/core/services/confirm-dialog.service'
+import { GuardUtils } from '@app/core/utils/guard.utils'
 
 @Component({
   selector: 'app-client-details',
@@ -56,6 +59,7 @@ export class ClientDetailsComponent implements OnInit {
   toastService = inject(ToastService)
   destroyRef = inject(DestroyRef)
   accountsHttpService = inject(AccountsHttpService)
+  confirmationService = inject(ConfirmDialogService)
 
   readonly imageBaseUrl = environment.imageBaseUrl
 
@@ -204,5 +208,13 @@ export class ClientDetailsComponent implements OnInit {
     this.clientAccounts.set(updatedAccounts)
     this.isAccountModalShown.set(false)
     this.toastService.success(successMessage)
+  }
+
+  canDeactivate(): CanDeactivateType {
+    if (this.isClientModalShown() || this.isAccountModalShown()) {
+      return GuardUtils.handleComponentDeactivate()
+    } else {
+      return true
+    }
   }
 }

@@ -46,8 +46,8 @@ export class AppValidators extends Validators {
   static onlyGeorgianOrLatin(control: AbstractControl) {
     if (control.value == null) return null
 
-    const georgianRegex = /^[\u10A0-\u10FF]+$/
-    const latinRegex = /^[A-Za-z]+$/
+    const georgianRegex = /^[\u10A0-\u10FF\s]+$/
+    const latinRegex = /^[A-Za-z\s]+$/
 
     if (georgianRegex.test(control.value)) {
       return null

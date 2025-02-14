@@ -124,8 +124,8 @@ export class ClientDetailsComponent implements OnInit {
         finalize(() => this.isClientDataProcessing.set(false))
       )
       .subscribe({
-        next: () => {
-          this.handleEditClientRequestSuccess('Client edited successfully', client)
+        next: (res) => {
+          this.handleEditClientRequestSuccess('Client edited successfully', res)
         },
         error: (error) => {
           this.handleRequestError(error)
@@ -133,7 +133,7 @@ export class ClientDetailsComponent implements OnInit {
       })
   }
 
-  private handleEditClientRequestSuccess(successMessage: string, client: CreatedClient) {
+  private handleEditClientRequestSuccess(successMessage: string, client: Client) {
     this.client.set({ ...this.client(), ...client })
     this.isClientModalShown.set(false)
     this.toastService.success(successMessage)

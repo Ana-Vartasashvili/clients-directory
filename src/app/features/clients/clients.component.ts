@@ -157,7 +157,6 @@ export class ClientsComponent implements OnInit {
   }
 
   private handleClientRequestSuccess(successMessage: string) {
-    this.clientsStore.updateFilterQuery({ Page: 1 })
     this.clientsStore.loadClientsByQuery(this.clientsStore.filter())
     this.isModalShown.set(false)
     this.toastService.success(successMessage)

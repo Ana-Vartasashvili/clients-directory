@@ -11,26 +11,6 @@ This project is a clients directory application built with Angular. It allows us
 
 ### Installation
 
-#### Frontend (Angular)
-
-1. Clone the repository:
-
-   ```sh
-   git clone https://github.com/Ana-Vartasashvili/clients-directory.git
-   ```
-
-2. Navigate to the project directory:
-
-   ```sh
-   cd clients-directory
-   ```
-
-3. Install the dependencies:
-
-   ```sh
-   npm install
-   ```
-
 #### Backend (ASP.NET Web API)
 
 1. Clone the backend repository:
@@ -51,10 +31,10 @@ This project is a clients directory application built with Angular. It allows us
    dotnet restore
    ```
 
-4. Build the project:
+4. Navigate to ClientsDirectoryApi:
 
    ```sh
-   dotnet build
+   cd ./ClientsDirectoryApi
    ```
 
 5. Run the project:
@@ -63,9 +43,27 @@ This project is a clients directory application built with Angular. It allows us
    dotnet run
    ```
 
-### Running the Application
+#### Frontend (Angular)
 
-#### Frontend
+1. Clone the repository:
+
+   ```sh
+   git clone https://github.com/Ana-Vartasashvili/clients-directory.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```sh
+   cd clients-directory
+   ```
+
+3. Install the dependencies:
+
+   ```sh
+   npm install
+   ```
+
+### Running the Frontend Application
 
 1. Start the development server:
 
@@ -78,11 +76,3 @@ This project is a clients directory application built with Angular. It allows us
 #### Backend
 
 1. Ensure the backend API is running by following the steps in the [Backend (ASP.NET Web API)](#backend-aspnet-web-api) section.
-
-### Building the Application
-
-To build the application for production, run:
-
-```sh
-ng build
-```

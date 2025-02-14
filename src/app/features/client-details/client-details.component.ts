@@ -113,7 +113,7 @@ export class ClientDetailsComponent implements OnInit {
     this.isClientModalShown.set(true)
   }
 
-  onModalSubmit(client: CreatedClient) {
+  onEditModalSubmit(client: CreatedClient) {
     this.isClientDataProcessing.set(true)
     const formData = FormUtils.getFormDataFromObject(client)
 
@@ -125,7 +125,7 @@ export class ClientDetailsComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.handleClientRequestSuccess('Client edited successfully')
+          this.handleEditClientRequestSuccess('Client edited successfully', client)
         },
         error: (error) => {
           this.handleRequestError(error)
@@ -133,8 +133,8 @@ export class ClientDetailsComponent implements OnInit {
       })
   }
 
-  private handleClientRequestSuccess(successMessage: string) {
-    this.clientStore.updateFilterQuery({ Page: 1 })
+  private handleEditClientRequestSuccess(successMessage: string, client: CreatedClient) {
+    this.client.set({ ...this.client(), ...client })
     this.isClientModalShown.set(false)
     this.toastService.success(successMessage)
   }

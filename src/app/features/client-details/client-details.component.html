@@ -51,7 +51,7 @@
 <app-client-modal
   [isVisible]="isClientModalShown()"
   (closeModal)="onClientModalClose()"
-  (submit)="onModalSubmit($event)"
+  (submit)="onEditModalSubmit($event)"
   [isLoading]="isClientDataProcessing()"
   [client]="client()"
   mode="edit"

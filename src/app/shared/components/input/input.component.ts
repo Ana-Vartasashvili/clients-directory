@@ -32,7 +32,7 @@ import { InputTextModule } from 'primeng/inputtext'
 export class InputComponent implements ControlValueAccessor {
   parentContainer = inject(ControlContainer)
 
-  @Input() type: 'text' | 'number' | 'tel' = 'text'
+  @Input() type: 'text' | 'number' | 'tel' | 'password' = 'text'
   @Input({ required: true }) name = ''
   @Input({ required: true }) label = ''
 
